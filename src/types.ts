@@ -51,12 +51,24 @@ export interface MessageModel {
 }
 
 /**
+ * Context objects for custom functions
+ */
+export type CustomFunctionContext<C> = {
+  [key: string]: C;
+};
+
+/**
+ * 
+ */
+export type CustomFunctionContextCallback<C> = () => CustomFunctionContext<C>;
+
+/**
  * Type of Custom function output props
  * 
- * @param type The type of the function, e.g. plot, map, table etc.
+ * @param type The type of the function, e.g. 'custom' used for type guarding
  * @param name The name of the function, e.g. createMap, createPlot etc.
  * @param args The args of the function, e.g. {datasetId: '123', variable: 'income'}
- * @param isIntermediate Flag indicate if the custom function is a intermediate step
+ * @param isIntermediate The flag indicate if the custom function is a intermediate step
  * @param result The result of the function run, it will be sent back to LLM as response of function calling
  * @param data The data of the function run, it will be used by customMessageCallback() to create the custom message e.g. plot, map etc.
  * @param customMessageCallback The callback function to create custom message e.g. plot/map if needed
@@ -71,12 +83,19 @@ export type CustomFunctionOutputProps<R, D> = {
   customMessageCallback?: CustomMessageCallback;
 };
 
-export type CallbackFunction = (props: {
-  functionName: string,
-  functionArgs: { [key: string]: unknown },
-  functionContext?: CustomFunctionContext | CustomFunctionContextCallback,
-  previousOutput?: CustomFunctionOutputProps<unknown, unknown>[]
-}) =>
+export type ErrorCallbackResult = {
+  success: boolean;
+  details: string;
+};
+
+export type CallbackFunctionProps = {
+  functionName: string;
+  functionArgs: Record<string, unknown>;
+  functionContext?: CustomFunctionContext<unknown> | CustomFunctionContextCallback<unknown>;
+  previousOutput?: CustomFunctionOutputProps<unknown, unknown>[];
+};
+
+export type CallbackFunction = (props: CallbackFunctionProps) =>
   | CustomFunctionOutputProps<unknown, unknown>
   | Promise<CustomFunctionOutputProps<unknown, unknown>>;
 
@@ -89,7 +108,7 @@ export type CallbackFunction = (props: {
 export type CustomFunctions = {
   [key: string]: {
     func: CallbackFunction;
-    context?: CustomFunctionContext | CustomFunctionContextCallback;
+    context?: CustomFunctionContext<unknown> | CustomFunctionContextCallback<unknown>;
     callbackMessage?: CustomMessageCallback;
   };
 };
@@ -104,7 +123,7 @@ export type CustomFunctionCall = {
   /** the arguments of the function */
   functionArgs: Record<string, unknown>;
   /** the output of function execution */
-  output: CustomFunctionOutputProps<unknown, unknown>;
+  output: CustomFunctionOutputProps<unknown, unknown>
 };
 
 /**
@@ -114,16 +133,8 @@ export type CustomFunctionCall = {
  */
 export type CustomMessageCallback = (
   customFunctionCall: CustomFunctionCall
-) => MessageModel | null;
+) => ReactNode | null;
 
-/**
- * Context objects for custom functions
- */
-export type CustomFunctionContext = {
-  [key: string]: unknown;
-};
-
-export type CustomFunctionContextCallback = () => CustomFunctionContext;
 /**
  * Type of StreamMessageCallback
  *
@@ -165,18 +176,33 @@ export type ProcessImageMessageProps = {
   streamMessageCallback: StreamMessageCallback;
 };
 
+/**
+ * Type of AudioToTextProps
+ * 
+ * @param audioMessage The audio message to be processed, the content should be base64 encoded string
+ * @param streamMessageCallback The stream message callback to stream the message back to the UI
+ */
+export type AudioToTextProps = {
+  audioBlob?: Blob;
+  audioBase64?: string;
+  streamMessageCallback?: StreamMessageCallback;
+};
+
 export type RegisterFunctionCallingProps = {
   name: string;
   description: string;
   properties: {
     [key: string]: {
-      type: 'string' | 'number' | 'boolean' | 'array';
+      type: string;  // 'string' | 'number' | 'boolean' | 'array';
       description: string;
+      items?: {
+        type: string;
+      }
     };
   };
   required: string[];
   callbackFunction: CallbackFunction;
-  callbackFunctionContext?: CustomFunctionContext;
+  callbackFunctionContext?: CustomFunctionContext<any>;
   callbackMessage?: CustomMessageCallback;
 };
 
@@ -185,8 +211,8 @@ export type OpenAIConfigProps = {
   model: string;
   temperature?: number;
   top_p?: number;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   instructions: string;
   version?: string;
 };

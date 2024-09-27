@@ -1,5 +1,12 @@
 .yarn
+.storybook
 dist
 .pnp.cjs
 node_modules
 .vscode
+*storybook.log
+src/stories
+.env.local
+.env
+wip/
+.env

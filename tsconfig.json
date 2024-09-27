@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
+    "jsx": "react-jsx",
     "target": "es2020",
-    "lib": ["es2020"],
+    "lib": ["dom", "es2020"],
     "module": "CommonJS",
     "moduleResolution": "node",
     "allowJs": true,

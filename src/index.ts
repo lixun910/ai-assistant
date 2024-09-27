@@ -1,5 +1,20 @@
-export function greet(name: string): string {
-  return `Hello, ${name}!`;
-}
+export { GPTAssistant } from './llm/chatgpt';
 
-export {OpenAIHelper} from './llm/openai';
+export { OllamaAssistant } from './llm/ollama';
+
+export { GoogleAssistant } from './llm/google';
+
+export { OpenAIAssistant } from './llm/openai';
+
+export { AiAssistant } from './components/assistant';
+
+export * from './types';
+
+export { useAssistant } from './hooks/use-assistant';
+
+export {
+  testApiKey,
+  testOpenAIChatGPTConnection,
+  testGeminiConnection,
+  testOllamConnection,
+} from './utils/connection-test';

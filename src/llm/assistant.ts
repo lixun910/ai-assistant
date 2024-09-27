@@ -1,17 +1,26 @@
-import { ProcessImageMessageProps, ProcessMessageProps, RegisterFunctionCallingProps } from '../types';
+import {
+  AudioToTextProps,
+  ProcessImageMessageProps,
+  ProcessMessageProps,
+  RegisterFunctionCallingProps,
+} from '../types';
 
-export class AbstractLLM {
+export class AbstractAssistant {
   /**
    * Get instance using singleton pattern
    */
-  public async getInstance(): Promise<AbstractLLM> {
+  public async getInstance(): Promise<AbstractAssistant> {
     throw new Error('Method not implemented.');
   }
 
   /**
    * Configure the LLM instance
    */
-  public static configure(props: { apiKey: string }) {
+  public static configure(props: {
+    model: string;
+    apiKey: string;
+    instructions: string;
+  }) {
     throw new Error('Method not implemented.');
   }
 
@@ -47,6 +56,20 @@ export class AbstractLLM {
    * Register custom function for function calling
    */
   public static registerFunctionCalling(props: RegisterFunctionCallingProps) {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * audio to text
+   */
+  public async audioToText(props: AudioToTextProps): Promise<string> {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
+   * Add additional context to the conversation, so LLM can understand the context better
+   */
+  public async addAdditionalContext(props: { context: string, callback?: () => void }) {
     throw new Error('Method not implemented.');
   }
 }
