@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import React,{ ReactNode, useEffect, useState } from 'react';
 import { MessageModel } from '../types';
 import MessageCard from './message-card';
 import PromptInputWithBottomActions from './prompt-input-with-bottom-actions';
@@ -41,7 +41,7 @@ export function AiAssistant(props: AiAssistantProps) {
   const [isPrompting, setIsPrompting] = useState(false);
 
   const {
-    initializeAssistant,
+    stopChat,
     sendTextMessage,
     sendImageMessage,
     audioToText,
@@ -53,47 +53,56 @@ export function AiAssistant(props: AiAssistantProps) {
     functions: props.functions,
   });
 
+  /**
+   * Handles sending a message, either as text or image based on the presence of a screenshot.
+   * @param {string} message - The message to be sent.
+   */
   const onSendMessage = async (message: string) => {
-    if (
-      props.screenCapturedBase64 &&
-      props.screenCapturedBase64.startsWith('data:image')
-    ) {
-      sendImageMessageHandler({
-        newMessage: message,
-        imageBase64String: props.screenCapturedBase64,
-        messages,
-        setMessages,
-        setTypingIndicator: setIsPrompting,
+    const isScreenshotAvailable = props.screenCapturedBase64?.startsWith('data:image');
+
+    const messageHandlerProps = {
+      newMessage: message,
+      messages,
+      setMessages,
+      setTypingIndicator: setIsPrompting,
+      onMessagesUpdated: props.onMessagesUpdated,
+    };
+
+    if (isScreenshotAvailable) {
+      // Handle image message
+      await sendImageMessageHandler({
+        ...messageHandlerProps,
+        imageBase64String: props.screenCapturedBase64!,
         sendImageMessage,
-        onMessagesUpdated: props.onMessagesUpdated,
       });
     } else {
-      sendTextMessageHandler({
-        newMessage: message,
-        messages,
-        setMessages,
-        setTypingIndicator: setIsPrompting,
+      // Handle text message
+      await sendTextMessageHandler({
+        ...messageHandlerProps,
         sendTextMessage,
-        onMessagesUpdated: props.onMessagesUpdated,
       });
     }
   };
 
+  /**
+   * Handles voice messages by converting audio to text.
+   * @param {Blob} audioBlob - The audio blob to be converted to text.
+   * @returns {Promise<string>} The transcribed text from the audio, or an empty string if transcription fails.
+   */
   const onVoiceMessage = async (audioBlob: Blob) => {
     return (await audioToText(audioBlob)) || '';
   };
 
+  /**
+   * Stops the currently running chat and updates the message list.
+   * This function is called when the user wants to interrupt the ongoing conversation.
+   */
   const stopRunningChat = () => {
+    // Set the prompting state to false to indicate that the chat has stopped
     setIsPrompting(false);
-    setMessages([
-      ...messages.slice(0, messages.length - 1),
-      {
-        message: messages[messages.length - 1].message,
-        direction: 'incoming',
-        sender: 'Error',
-        position: 'normal',
-      },
-    ]);
+
+    // stop processing
+    stopChat();
   };
 
   const reportQuestion = (messageIndex: number) => {

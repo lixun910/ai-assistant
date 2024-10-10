@@ -119,8 +119,7 @@ export class GPTAssistant extends AbstractAssistant {
     return GPTAssistant.instance;
   }
 
-  private async cancelRun() {
-    const release = await this.mutex.acquire();
+  public override async stop() {
     try {
       if (this.thread) {
         const threadId = this.thread.id;
@@ -138,15 +137,14 @@ export class GPTAssistant extends AbstractAssistant {
         }
       }
     } catch (e) {
-      console.error('cancelRun() error: ', e);
-    } finally {
-      release();
+      console.error('stop() error: ', e);
+      throw new Error('stop() error: ' + e);
     }
   }
 
   public override async close() {
     if (this.thread) {
-      await this.cancelRun();
+      await this.stop();
       await this.openai.beta.threads.del(this.thread.id);
       if (this.assistant) {
         await this.openai.beta.assistants.del(this.assistant.id);
@@ -251,27 +249,40 @@ export class GPTAssistant extends AbstractAssistant {
    * Add additional context to the conversation using OpenAI Assistants
    * Since OpenAI will maintain the context in a thread, so we can add additional context to the conversation
    * as a user message, and don't expect a response from the assistant.
-   * 
+   *
    * @param context String to be added to the conversation context
    */
-  public override async addAdditionalContext({ context, callback }: { context: string, callback?: () => void }) {
+  public override async addAdditionalContext({
+    context,
+    callback,
+  }: {
+    context: string;
+    callback?: () => void;
+  }) {
     if (!this.openai || !this.thread || !this.assistant) {
       throw new Error('OpenAI is not initialized.');
     }
     const release = await this.mutex.acquire();
     try {
-      const message = await this.openai.beta.threads.messages.create(this.thread.id, {
-        role: 'user',
-        content: context + '\n Please do not respond to this message.',
-      });
+      await this.openai.beta.threads.messages.create(
+        this.thread.id,
+        {
+          role: 'user',
+          content: context + '\n Please do not respond to this message.',
+        }
+      );
 
-      const run = await this.openai.beta.threads.runs
-        .createAndPoll(this.thread.id, {
+      const run = await this.openai.beta.threads.runs.createAndPoll(
+        this.thread.id,
+        {
           assistant_id: this.assistant.id,
-        });
-      
+        }
+      );
+
       if (run.status === 'completed') {
-        const messages = await this.openai.beta.threads.messages.list(run.thread_id);
+        const messages = await this.openai.beta.threads.messages.list(
+          run.thread_id
+        );
         for (const message of messages.data.reverse()) {
           console.log(`${message.role} > ${message.content[0]}`);
         }
@@ -407,7 +418,7 @@ export class GPTAssistant extends AbstractAssistant {
       }
 
       // if there is more than one function call in the same run, process them
-      let previousFunctionName: string | null =
+      const previousFunctionName: string | null =
         nextRun?.run?.required_action?.submit_tool_outputs.tool_calls?.[0]
           ?.function?.name || null;
 

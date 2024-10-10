@@ -38,6 +38,8 @@ export class LangChainAssistant extends AbstractAssistant {
 
   protected static tools: BindToolsInput[] = [];
 
+  protected abortController: AbortController | null = null;
+
   protected constructor() {
     super();
   }
@@ -47,7 +49,7 @@ export class LangChainAssistant extends AbstractAssistant {
     model,
     instructions,
     temperature,
-    topP
+    topP,
   }: {
     apiKey?: string;
     model?: string;
@@ -109,6 +111,13 @@ export class LangChainAssistant extends AbstractAssistant {
     );
   }
 
+  public override stop() {
+    if (this.llm && this.abortController) {
+      this.abortController.abort();
+      this.abortController = null;
+    }
+  }
+
   public override async processTextMessage({
     textMessage,
     streamMessageCallback,
@@ -116,11 +125,16 @@ export class LangChainAssistant extends AbstractAssistant {
     if (this.llm === null) {
       throw new Error('LLM instance is not initialized');
     }
+    if (!this.abortController) {
+      this.abortController = new AbortController();
+    }
 
     this.messages.push(new HumanMessage(textMessage));
 
-    let stream = await this.llm.stream(this.messages);
-    let chunks: AIMessageChunk[] = [];
+    const stream = await this.llm.stream(this.messages, {
+      signal: this.abortController?.signal,
+    });
+    const chunks: AIMessageChunk[] = [];
     let message = '';
 
     for await (const chunk of stream) {
@@ -142,7 +156,8 @@ export class LangChainAssistant extends AbstractAssistant {
       this.messages.push(finalChunk);
 
       if (finalChunk.tool_calls) {
-        const functionOutput: CustomFunctionOutputProps<unknown, unknown>[] = [];
+        const functionOutput: CustomFunctionOutputProps<unknown, unknown>[] =
+          [];
 
         for (const toolCall of finalChunk.tool_calls) {
           const functionName = toolCall.name;
@@ -183,7 +198,7 @@ export class LangChainAssistant extends AbstractAssistant {
               {
                 content: JSON.stringify(output.result),
                 id: toolCall.id || '',
-                // @ts-ignore This is for OpenAI tool_call_id. See @langchain/core/messages/tool.ts
+                // @ts-expect-error This is for OpenAI tool_call_id. See @langchain/core/messages/tool.ts
                 tool_call_id: toolCall.id || '',
               },
               toolCall.id || '',
@@ -195,8 +210,13 @@ export class LangChainAssistant extends AbstractAssistant {
         }
 
         if (functionOutput.length > 0) {
-          const stream = await this.llm.stream(this.messages);
-          if (message.length > 0) message += '\n\n';
+          const stream = await this.llm.stream(this.messages, {
+            signal: this.abortController?.signal,
+          });
+          if (message.length > 0) {
+            // add a new line to the message if the message is not empty
+            message += '\n\n';
+          }
           for await (const chunk of stream) {
             message += chunk.content.toString();
             streamMessageCallback({ deltaMessage: message });
@@ -230,6 +250,10 @@ export class LangChainAssistant extends AbstractAssistant {
       throw new Error('LLM instance is not initialized');
     }
 
+    if (!this.abortController) {
+      this.abortController = new AbortController();
+    }
+
     const newMessage = new HumanMessage({
       content: [
         {
@@ -247,10 +271,12 @@ export class LangChainAssistant extends AbstractAssistant {
 
     this.messages.push(newMessage);
 
-    const stream = await this.llm.stream(this.messages);
+    const stream = await this.llm.stream(this.messages, {
+      signal: this.abortController?.signal,
+    });
 
     let message = '';
-    let chunks: AIMessageChunk[] = [];
+    const chunks: AIMessageChunk[] = [];
     for await (const chunk of stream) {
       chunks.push(chunk);
       if (chunk.content.length > 0) {

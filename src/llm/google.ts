@@ -31,12 +31,14 @@ export class GoogleAssistant extends LangChainAssistant {
       GoogleAssistant.instance.aiModel.modelName !== GoogleAssistant.model ||
       GoogleAssistant.instance.aiModel.apiKey !== GoogleAssistant.apiKey
     ) {
+      // reset the instance if the model or api key is changed
+      GoogleAssistant.instance = new GoogleAssistant();
     }
     return GoogleAssistant.instance;
   }
 
   private blobToBase64(blob) {
-    return new Promise((resolve, _) => {
+    return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result);
       reader.readAsDataURL(blob);

@@ -63,10 +63,9 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
         ? 'bg-danger-100/50 border border-danger-100 text-foreground'
         : '';
     const failedMessage = (
-      <p>
-        Sorry, something went wrong. You can try to refresh the page and try
-        again. If the issue persists please contact us through our help center
-        at&nbsp;
+      <p className="mb-2">
+        Sorry, something went wrong. If the issue persists please contact us
+        through our help center at&nbsp;
         <Link target="_blank" href="https://github.com" size="sm">
           Github
         </Link>
@@ -164,8 +163,10 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                     alt="screenshot"
                   />
                 )}
+              {/* show error message if any */}
+              {hasFailed && failedMessage}
               {/* show message */}
-              {hasFailed ? failedMessage + `${message}` : message}
+              {message}
               {/* <Markdown className="flex flex-col gap-4">{message as string}</Markdown> */}
               {/* show custom message */}
               {customMessage && React.isValidElement(customMessage) && (
@@ -200,8 +201,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                       )}
                     </Button>
                   </Tooltip>
-                  {false && (
-                    <Tooltip content="Feedback">
+                  {/* <Tooltip content="Feedback">
                       <Button
                         isIconOnly
                         radius="full"
@@ -221,8 +221,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                           />
                         )}
                       </Button>
-                    </Tooltip>
-                  )}
+                    </Tooltip> */}
                   <Tooltip content="Feedback">
                     <Button
                       isIconOnly

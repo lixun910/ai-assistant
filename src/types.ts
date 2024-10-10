@@ -193,15 +193,16 @@ export type RegisterFunctionCallingProps = {
   description: string;
   properties: {
     [key: string]: {
-      type: string;  // 'string' | 'number' | 'boolean' | 'array';
+      type: string; // 'string' | 'number' | 'boolean' | 'array';
       description: string;
       items?: {
         type: string;
-      }
+      };
     };
   };
   required: string[];
   callbackFunction: CallbackFunction;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   callbackFunctionContext?: CustomFunctionContext<any>;
   callbackMessage?: CustomMessageCallback;
 };

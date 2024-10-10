@@ -38,7 +38,7 @@ export default function Component({
   };
 
   const onStopClick = () => {
-    onStopChat && onStopChat();
+    onStopChat?.();
   };
 
   const [isShiftPressed, setIsShiftPressed] = React.useState(false);
@@ -168,6 +168,7 @@ export default function Component({
           onValueChange={setPrompt}
           onKeyDown={onKeyDown}
           onKeyUp={onKeyUp}
+          disabled={status === 'pending'}
         />
         <div className="flex w-full items-center justify-between  gap-2 overflow-scroll px-4 pb-4">
           <div className="flex w-full gap-1 md:gap-3">
@@ -203,24 +204,24 @@ export default function Component({
                 </Button>
               </>
             )}
+            <Tooltip content="Restart chat">
+              <Button
+                isIconOnly
+                radius="full"
+                size="sm"
+                variant="light"
+                onPress={() => null}
+              >
+                <Icon
+                  className="text-lg text-default-600"
+                  icon="lucide:list-restart"
+                />
+              </Button>
+            </Tooltip>
           </div>
           <p className="py-1 text-tiny text-default-400">
             {prompt.length}/2000
           </p>
-          <Tooltip content="Restart chat">
-            <Button
-              isIconOnly
-              radius="full"
-              size="sm"
-              variant="light"
-              onPress={() => null}
-            >
-              <Icon
-                className="text-lg text-default-600"
-                icon="lucide:list-restart"
-              />
-            </Button>
-          </Tooltip>
         </div>
       </form>
     </div>

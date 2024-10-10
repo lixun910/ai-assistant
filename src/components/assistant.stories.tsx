@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { AiAssistant } from './assistant';
@@ -10,7 +11,7 @@ import {
 const meta = {
   component: AiAssistant,
   decorators: [
-    (Story: any) => (
+    (Story: React.ComponentType) => (
       <div className="rounded p-4 w-[400px] h-screen">
         <Story />
       </div>
@@ -100,13 +101,18 @@ const pizzaDatabase: PizzaDatabase = {
 };
 
 // type guard to ensure pizzaDatabase is type of PizzaDatabase
-const isPizzaDatabase = (obj: any): obj is PizzaDatabase => {
-  return 'db' in obj && 'updateSize' in obj;
+const isPizzaDatabase = (obj: unknown): obj is PizzaDatabase => {
+  return typeof obj === 'object' && obj !== null && 'db' in obj && 'updateSize' in obj;
 };
 
 // type guard if object is CustomPizzaOutput
-const isCustomPizzaOutput = (obj: any): obj is CustomPizzaOutput => {
-  return 'type' in obj && obj.type === 'CustomPizzaOutput';
+const isCustomPizzaOutput = (obj: unknown): obj is CustomPizzaOutput => {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'type' in obj &&
+    obj.type === 'CustomPizzaOutput'
+  );
 };
 
 type OrderPizzaOutput = CustomFunctionOutputProps<
@@ -122,8 +128,13 @@ type OrderPizzaOutput = CustomFunctionOutputProps<
   type: 'OrderPizzaOutput';
 };
 
-const isOrderPizzaOutput = (obj: any): obj is OrderPizzaOutput => {
-  return 'type' in obj && obj.type === 'OrderPizzaOutput';
+const isOrderPizzaOutput = (obj: unknown): obj is OrderPizzaOutput => {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'type' in obj &&
+    obj.type === 'OrderPizzaOutput'
+  );
 };
 
 const functions: RegisterFunctionCallingProps[] = [
@@ -166,7 +177,7 @@ const functions: RegisterFunctionCallingProps[] = [
       return output;
     },
     callbackFunctionContext: { pizzaDatabase },
-    callbackMessage: ({ functionName, functionArgs, output }) => {
+    callbackMessage: ({ output }) => {
       if (output && isCustomPizzaOutput(output)) {
         return (
           <div className="p-4">
@@ -218,7 +229,7 @@ const functions: RegisterFunctionCallingProps[] = [
         data: { pizzaId, numberOfPizzas, price },
       };
     },
-    callbackMessage: ({ functionName, functionArgs, output }) => {
+    callbackMessage: ({ output }) => {
       if (output && isOrderPizzaOutput(output)) {
         return (
           <div className="p-4">
@@ -280,7 +291,7 @@ export const Gemini: Story = {
 
 export const Ollama: Story = {
   args: {
-    modelProvider: 'ollma',
+    modelProvider: 'ollama',
     model: 'llama3.1',
     apiKey: '',
     welcomeMessage,
@@ -291,7 +302,7 @@ export const Ollama: Story = {
 
 export const Alibaba: Story = {
   args: {
-    modelProvider: 'Alibaba',
+    modelProvider: 'ollama',
     model: 'qwen2',
     apiKey: '',
     welcomeMessage,

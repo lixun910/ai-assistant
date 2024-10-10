@@ -16,7 +16,9 @@ export function ScreenshotWrapper({
 }: ScreenshotWrapperProps) {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [crossHairsTop, setCrossHairsTop] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [crossHairsLeft, setCrossHairsLeft] = useState(0);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [windowWidth, setWindowWidth] = useState(0);

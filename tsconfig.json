@@ -3,7 +3,7 @@
     "jsx": "react-jsx",
     "target": "es2020",
     "lib": ["dom", "es2020"],
-    "module": "CommonJS",
+    "module": "es2020",
     "moduleResolution": "node",
     "allowJs": true,
     "noEmit": true,

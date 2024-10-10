@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '@nextui-org/react';
 import { Icon } from '@iconify/react';
 import { useAudioRecorder } from 'react-audio-voice-recorder';
@@ -12,7 +13,6 @@ export default function VoiceChatButton({
 
   const { isRecording, recordingBlob, startRecording, stopRecording } =
     useAudioRecorder(
-      // @ts-ignore
       { noiseSuppression: true, echoCancellation: true },
       (err) => console.table(err) // onNotAllowedOrFound
     );

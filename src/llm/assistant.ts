@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   AudioToTextProps,
   ProcessImageMessageProps,
@@ -32,6 +33,13 @@ export class AbstractAssistant {
   }
 
   /**
+   * Stop processing
+   */
+  public stop() {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
    * Process image message
    */
   public async processImageMessage(props: ProcessImageMessageProps) {
@@ -48,7 +56,7 @@ export class AbstractAssistant {
   /**
    * Process text message
    */
-  public async processTextMessage(props: ProcessMessageProps) {
+  public async processTextMessage(props: ProcessMessageProps): Promise<unknown> {
     throw new Error('Method not implemented.');
   }
 

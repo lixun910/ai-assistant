@@ -38,10 +38,10 @@ export class OllamaAssistant extends LangChainAssistant {
     if (OllamaAssistant.instance === null) {
       OllamaAssistant.instance = new OllamaAssistant();
       // NOTE: hack to avoid ollama always using tools
-      // const instructions =
-      //   'Analyse the given prompt and decided whether or not it can be answered by a tool. If it cannot, please use the model to answer the prompt directly and do not return any tool.';
-      // OllamaAssistant.instance.messages.push(new HumanMessage(instructions));
-      // OllamaAssistant.instance.messages.push(new AIMessage('Got it.'));
+      const instructions =
+        'Analyse the given prompt and decided whether or not it can be answered by a tool. If it cannot, please use the model to answer the prompt directly and do not return any tool.';
+      OllamaAssistant.instance.messages.push(new HumanMessage(instructions));
+      OllamaAssistant.instance.messages.push(new AIMessage('Got it.'));
     }
 
     return OllamaAssistant.instance;
@@ -65,9 +65,5 @@ export class OllamaAssistant extends LangChainAssistant {
     if (instructions) OllamaAssistant.instructions = instructions;
     if (temperature) OllamaAssistant.temperature = temperature;
     if (topP) OllamaAssistant.topP = topP;
-
-    // NOTE: hack to avoid ollama always using tools
-    // OllamaAssistant.instructions +=
-    //   '\nNote: Please analyse the user prompt and decided whether or not it can be answered by a tool. If it cannot, please use the model to answer the prompt directly and do not return any tool.';
   }
 }

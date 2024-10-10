@@ -2,13 +2,12 @@ import { OllamaAssistant } from '../llm/ollama';
 import { GPTAssistant } from '../llm/chatgpt';
 import {
   CallbackFunction,
-  CustomFunctionCall,
   CustomFunctionContext,
   CustomMessageCallback,
   StreamMessageCallback,
 } from '../types';
 import { GoogleAssistant } from '../llm/google';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 
 export interface UseAssistantProps {
   modelProvider: string;
@@ -44,7 +43,7 @@ export type SendImageMessageProps = {
   streamMessageCallback: StreamMessageCallback;
 };
 
-let llm: OllamaAssistant | GoogleAssistant | GPTAssistant | null = null;
+let assistant: OllamaAssistant | GoogleAssistant | GPTAssistant | null = null;
 
 export const useAssistant = ({
   modelProvider,
@@ -87,7 +86,7 @@ export const useAssistant = ({
       });
 
       // initialize the assistant model
-      llm = await AssistantModel.getInstance();
+      assistant = await AssistantModel.getInstance();
 
       setApiKeyStatus('success');
     } catch (error) {
@@ -96,11 +95,29 @@ export const useAssistant = ({
     }
   };
 
+  const checkLLMInstance = async () => {
+    if (assistant === null) {
+      await initializeAssistant();
+    }
+    if (assistant === null) {
+      throw new Error('LLM instance is not initialized');
+    }
+  };
+
+
+  // pause processing message if the user hits the stop button
+  const stopChat = () => {
+    if (assistant) {
+      assistant.stop();
+    }
+  };
+
   const sendTextMessage = async ({
     message,
     streamMessageCallback,
   }: SendTextMessageProps) => {
-    await llm?.processTextMessage({
+    await checkLLMInstance();
+    await assistant?.processTextMessage({
       textMessage: message,
       streamMessageCallback,
     });
@@ -111,7 +128,7 @@ export const useAssistant = ({
     message,
     streamMessageCallback,
   }: SendImageMessageProps) => {
-    await llm?.processImageMessage({
+    await assistant?.processImageMessage({
       imageMessage: imageBase64String,
       textMessage: message,
       streamMessageCallback,
@@ -119,7 +136,7 @@ export const useAssistant = ({
   };
 
   const audioToText = async (audioBlob: Blob) => {
-    return await llm?.audioToText({ audioBlob });
+    return await assistant?.audioToText({ audioBlob });
   };
 
   const addAdditionalContext = async ({
@@ -129,7 +146,7 @@ export const useAssistant = ({
     context: string;
     callback?: () => void;
   }) => {
-    await llm?.addAdditionalContext({ context, callback });
+    await assistant?.addAdditionalContext({ context, callback });
   };
 
   return {
@@ -138,12 +155,13 @@ export const useAssistant = ({
     sendImageMessage,
     audioToText,
     addAdditionalContext,
+    stopChat,
     apiKeyStatus,
   };
 };
 
 function GetAssistantModelByProvider(provider: string) {
-  switch (provider) {
+  switch (provider.toLowerCase()) {
     case 'openai':
       return GPTAssistant;
     case 'google':

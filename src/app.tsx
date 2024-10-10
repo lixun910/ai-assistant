@@ -1,3 +1,4 @@
+import React from 'react';
 import { AiAssistant } from './components/assistant';
 import { ScreenshotWrapper } from './components/screenshot-wrapper';
 import { useState } from 'react';

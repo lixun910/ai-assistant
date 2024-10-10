@@ -73,7 +73,7 @@ export async function sendTextMessageHandler({
     const newMessages: MessageModel[] = [
       ...updatedMesssages,
       {
-        message: 'Error occured while processing the request: ' + error,
+        message: 'Error occured while processing the request. ' + error,
         direction: 'incoming',
         sender: 'Error',
         position: 'normal',
@@ -160,7 +160,7 @@ export async function sendImageMessageHandler({
     const newMessages: MessageModel[] = [
       ...updatedMesssages,
       {
-        message: 'Error occured while processing the request: ' + error,
+        message: 'Error occured while processing the request. Details: ' + error,
         direction: 'incoming',
         sender: 'Error',
         position: 'normal',

@@ -13,7 +13,7 @@ export class OpenAIAssistant extends LangChainAssistant {
   private constructor() {
     super();
 
-    // Initialize Google instance
+    // Initialize openai instance
     this.aiModel = new ChatOpenAI({
       model: OpenAIAssistant.model,
       apiKey: OpenAIAssistant.apiKey,
@@ -47,14 +47,22 @@ export class OpenAIAssistant extends LangChainAssistant {
     if (!audioBlob) {
       throw new Error('audioBlob is null');
     }
-    // create FsReadStream from the audioBlob
+    if (!this.abortController) {
+      this.abortController = new AbortController();
+    }
+    // create File from the audioBlob
     const file = new File([audioBlob], 'audio.webm');
 
     const transcriptionResponse =
-      await this.openAIClient.audio.transcriptions.create({
-        file,
-        model: 'whisper-1',
-      });
+      await this.openAIClient.audio.transcriptions.create(
+        {
+          file,
+          model: 'whisper-1',
+        },
+        {
+          signal: this.abortController.signal,
+        }
+      );
 
     return transcriptionResponse.text;
   }
