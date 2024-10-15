@@ -9,6 +9,9 @@ import {
 import { GoogleAssistant } from '../llm/google';
 import { useState } from 'react';
 
+/**
+ * Props for the useAssistant hook.
+ */
 export interface UseAssistantProps {
   modelProvider: string;
   model: string;
@@ -45,6 +48,13 @@ export type SendImageMessageProps = {
 
 let assistant: OllamaAssistant | GoogleAssistant | GPTAssistant | null = null;
 
+/**
+ * A custom hook for managing an AI assistant.
+ * This hook provides functionality to initialize, send messages to, and control an AI assistant.
+ * 
+ * @param {UseAssistantProps} props - Configuration options for the assistant.
+ * @returns {Object} An object containing methods to interact with the assistant and its current status.
+ */
 export const useAssistant = ({
   modelProvider,
   model,
@@ -56,6 +66,9 @@ export const useAssistant = ({
 }: UseAssistantProps) => {
   const [apiKeyStatus, setApiKeyStatus] = useState<string>('failed');
 
+  /**
+   * Initializes the AI assistant with the provided configuration.
+   */
   const initializeAssistant = async () => {
     try {
       const AssistantModel = GetAssistantModelByProvider(modelProvider);
@@ -95,6 +108,10 @@ export const useAssistant = ({
     }
   };
 
+  /**
+   * Checks if the LLM instance is initialized, and initializes it if not.
+   * @throws {Error} If the LLM instance fails to initialize.
+   */
   const checkLLMInstance = async () => {
     if (assistant === null) {
       await initializeAssistant();
@@ -105,13 +122,29 @@ export const useAssistant = ({
   };
 
 
-  // pause processing message if the user hits the stop button
+  /**
+   * Stops the current chat processing.
+   */
   const stopChat = () => {
     if (assistant) {
       assistant.stop();
     }
   };
 
+  /**
+   * Restarts the chat by stopping the current chat and reinitializing the assistant.
+   */
+  const restartChat = async () => {
+    if (assistant) {
+      await assistant.restart();
+      await initializeAssistant();
+    }
+  };
+
+  /**
+   * Sends a text message to the assistant and processes the response.
+   * @param {SendTextMessageProps} props - The message and callback for streaming the response.
+   */
   const sendTextMessage = async ({
     message,
     streamMessageCallback,
@@ -123,6 +156,10 @@ export const useAssistant = ({
     });
   };
 
+  /**
+   * Sends an image message to the assistant and processes the response.
+   * @param {SendImageMessageProps} props - The image data, message, and callback for streaming the response.
+   */
   const sendImageMessage = async ({
     imageBase64String,
     message,
@@ -135,10 +172,19 @@ export const useAssistant = ({
     });
   };
 
+  /**
+   * Converts audio to text using the assistant's capabilities.
+   * @param {Blob} audioBlob - The audio data to be converted.
+   * @returns {Promise<string>} The transcribed text.
+   */
   const audioToText = async (audioBlob: Blob) => {
     return await assistant?.audioToText({ audioBlob });
   };
 
+  /**
+   * Adds additional context to the assistant's conversation.
+   * @param {Object} params - The context and optional callback.
+   */
   const addAdditionalContext = async ({
     context,
     callback,
@@ -156,10 +202,16 @@ export const useAssistant = ({
     audioToText,
     addAdditionalContext,
     stopChat,
+    restartChat,
     apiKeyStatus,
   };
 };
 
+/**
+ * Returns the appropriate Assistant model based on the provider.
+ * @param {string} provider - The name of the AI provider.
+ * @returns {typeof OllamaAssistant | typeof GoogleAssistant | typeof GPTAssistant} The assistant model class.
+ */
 function GetAssistantModelByProvider(provider: string) {
   switch (provider.toLowerCase()) {
     case 'openai':

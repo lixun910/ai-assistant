@@ -38,6 +38,12 @@ export class OpenAIAssistant extends LangChainAssistant {
     return OpenAIAssistant.instance;
   }
 
+  public override restart() {
+    super.restart();
+    // need to reset the instance so getInstance doesn't return the same instance
+    OpenAIAssistant.instance = null;
+  }
+
   public override async audioToText({
     audioBlob,
   }: AudioToTextProps): Promise<string> {

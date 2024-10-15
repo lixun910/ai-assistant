@@ -118,9 +118,17 @@ export class LangChainAssistant extends AbstractAssistant {
     }
   }
 
+  public override restart() {
+    this.stop();
+    this.messages = [];
+    // need to reset the llm so getInstance doesn't return the same instance
+    this.llm = null;
+  }
+
   public override async processTextMessage({
     textMessage,
     streamMessageCallback,
+    useTool = true,
   }: ProcessMessageProps) {
     if (this.llm === null) {
       throw new Error('LLM instance is not initialized');
@@ -155,7 +163,7 @@ export class LangChainAssistant extends AbstractAssistant {
     if (finalChunk) {
       this.messages.push(finalChunk);
 
-      if (finalChunk.tool_calls) {
+      if (finalChunk.tool_calls && useTool) {
         const functionOutput: CustomFunctionOutputProps<unknown, unknown>[] =
           [];
 

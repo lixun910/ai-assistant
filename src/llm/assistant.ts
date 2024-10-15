@@ -40,6 +40,13 @@ export class AbstractAssistant {
   }
 
   /**
+   * Restart the chat
+   */
+  public restart() {
+    throw new Error('Method not implemented.');
+  }
+
+  /**
    * Process image message
    */
   public async processImageMessage(props: ProcessImageMessageProps) {

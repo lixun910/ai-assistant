@@ -154,6 +154,9 @@ const functions: RegisterFunctionCallingProps[] = [
       functionContext,
     }) => {
       const size = parseInt(functionArgs.size as string);
+      if (isNaN(size)) {
+        throw new Error('size must be a number');
+      }
       const { pizzaId } = await customizePizza(size);
 
       if (functionContext && 'pizzaDatabase' in functionContext) {
@@ -208,9 +211,11 @@ const functions: RegisterFunctionCallingProps[] = [
       functionArgs,
       previousOutput,
     }) => {
-      let pizzaId = functionArgs.pizzaId
-        ? parseInt(functionArgs.pizzaId as string)
-        : 0;
+      // if the functionArgs.pizzaId is not a number, throw an error
+      let pizzaId = parseInt(functionArgs.pizzaId as string);
+      if (isNaN(pizzaId)) {
+        throw new Error('pizzaId must be a number');
+      }
       if (previousOutput) {
         // reverse the previous output to get the latest custom pizza output
         const reverseOutput = [...previousOutput].reverse();

@@ -37,6 +37,12 @@ export class GoogleAssistant extends LangChainAssistant {
     return GoogleAssistant.instance;
   }
 
+  public override restart() {
+    super.restart();
+    // need to reset the instance so getInstance doesn't return the same instance
+    GoogleAssistant.instance = null;
+  }
+
   private blobToBase64(blob) {
     return new Promise((resolve) => {
       const reader = new FileReader();

@@ -8,5 +8,3 @@ node_modules
 src/stories
 .env.local
 .env
-wip/
-.env

@@ -77,6 +77,7 @@ export class GPTAssistant extends AbstractAssistant {
 
     return !versionExisted || versionChanged;
   }
+
   public static async getInstance(): Promise<GPTAssistant> {
     // check if openAIkey is set
     if (
@@ -151,6 +152,8 @@ export class GPTAssistant extends AbstractAssistant {
       }
     }
     this.thread = null;
+    // need to reset the instance so getInstance doesn't return the same instance
+    GPTAssistant.instance = null;
   }
 
   public static override configure({

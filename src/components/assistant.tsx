@@ -1,4 +1,4 @@
-import React,{ ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { MessageModel } from '../types';
 import MessageCard from './message-card';
 import PromptInputWithBottomActions from './prompt-input-with-bottom-actions';
@@ -24,24 +24,25 @@ export type AiAssistantProps = UseAssistantProps & {
   onMessagesUpdated?: (messages: MessageModel[]) => void;
 };
 
+const createWelcomeMessage = (welcomeMessage: string): MessageModel => ({
+  message: welcomeMessage,
+  sentTime: 'just now',
+  sender: 'assistant',
+  direction: 'incoming',
+  position: 'first',
+});
+
 export function AiAssistant(props: AiAssistantProps) {
   const [messages, setMessages] = useState<MessageModel[]>(
     props.historyMessages && props.historyMessages.length > 0
       ? props.historyMessages
-      : [
-          {
-            message: props.welcomeMessage,
-            sentTime: 'just now',
-            sender: 'assistant',
-            direction: 'incoming',
-            position: 'first',
-          },
-        ]
+      : [createWelcomeMessage(props.welcomeMessage)]
   );
   const [isPrompting, setIsPrompting] = useState(false);
 
   const {
     stopChat,
+    restartChat,
     sendTextMessage,
     sendImageMessage,
     audioToText,
@@ -58,7 +59,8 @@ export function AiAssistant(props: AiAssistantProps) {
    * @param {string} message - The message to be sent.
    */
   const onSendMessage = async (message: string) => {
-    const isScreenshotAvailable = props.screenCapturedBase64?.startsWith('data:image');
+    const isScreenshotAvailable =
+      props.screenCapturedBase64?.startsWith('data:image');
 
     const messageHandlerProps = {
       newMessage: message,
@@ -97,7 +99,7 @@ export function AiAssistant(props: AiAssistantProps) {
    * Stops the currently running chat and updates the message list.
    * This function is called when the user wants to interrupt the ongoing conversation.
    */
-  const stopRunningChat = () => {
+  const onStopChat = () => {
     // Set the prompting state to false to indicate that the chat has stopped
     setIsPrompting(false);
 
@@ -111,6 +113,20 @@ export function AiAssistant(props: AiAssistantProps) {
     if (props.onFeedback) {
       props.onFeedback(question || '');
     }
+  };
+
+  /**
+   * Restart the current chat
+   */
+  const onRestartChat = async () => {
+    // set the prompting state to false
+    setIsPrompting(false);
+
+    // reset the messages
+    setMessages([createWelcomeMessage(props.welcomeMessage)]);
+
+    // restart the assistant
+    await restartChat();
   };
 
   // scroll to bottom when new message is added
@@ -193,7 +209,8 @@ export function AiAssistant(props: AiAssistantProps) {
             onRemoveScreenshot={props.onRemoveScreenshot}
             screenCaptured={props.screenCapturedBase64}
             status={isPrompting ? 'pending' : 'success'}
-            onStopChat={stopRunningChat}
+            onStopChat={onStopChat}
+            onRestartChat={onRestartChat}
           />
           <p className="px-2 text-tiny text-default-400">
             AI can make mistakes. Consider checking information.

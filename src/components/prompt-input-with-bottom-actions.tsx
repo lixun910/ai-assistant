@@ -15,6 +15,7 @@ type PromptInputWithBottomActionsProps = {
   defaultPromptText?: string;
   status?: 'success' | 'failed' | 'pending';
   onStopChat?: () => void;
+  onRestartChat?: () => void;
 };
 
 export default function Component({
@@ -27,6 +28,7 @@ export default function Component({
   defaultPromptText = '',
   status,
   onStopChat,
+  onRestartChat,
 }: PromptInputWithBottomActionsProps) {
   const ideas = [];
 
@@ -39,6 +41,10 @@ export default function Component({
 
   const onStopClick = () => {
     onStopChat?.();
+  };
+
+  const onRestartChatClick = () => {
+    onRestartChat?.();
   };
 
   const [isShiftPressed, setIsShiftPressed] = React.useState(false);
@@ -210,7 +216,7 @@ export default function Component({
                 radius="full"
                 size="sm"
                 variant="light"
-                onPress={() => null}
+                onPress={onRestartChatClick}
               >
                 <Icon
                   className="text-lg text-default-600"

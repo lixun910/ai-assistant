@@ -161,6 +161,7 @@ export type ProcessMessageProps = {
   imageMessage?: string;
   userActions?: UserActionProps[];
   streamMessageCallback: StreamMessageCallback;
+  useTool?: boolean;
 };
 
 /**

@@ -1,10 +1,11 @@
 import { ChatOllama } from '@langchain/ollama';
 import {
-  AIMessage,
+  AIMessageChunk,
   HumanMessage,
   SystemMessage,
 } from '@langchain/core/messages';
 import { LangChainAssistant } from './langchain';
+import { ProcessMessageProps } from '../types';
 
 export class OllamaAssistant extends LangChainAssistant {
   private aiModel: ChatOllama;
@@ -38,13 +39,19 @@ export class OllamaAssistant extends LangChainAssistant {
     if (OllamaAssistant.instance === null) {
       OllamaAssistant.instance = new OllamaAssistant();
       // NOTE: hack to avoid ollama always using tools
-      const instructions =
-        'Analyse the given prompt and decided whether or not it can be answered by a tool. If it cannot, please use the model to answer the prompt directly and do not return any tool.';
-      OllamaAssistant.instance.messages.push(new HumanMessage(instructions));
-      OllamaAssistant.instance.messages.push(new AIMessage('Got it.'));
+      // const instructions =
+      //   'Analyse the given prompt and decided whether or not it can be answered by a tool. If it cannot, please use the model to answer the prompt directly and do not return any tool.';
+      // OllamaAssistant.instance.messages.push(new HumanMessage(instructions));
+      // OllamaAssistant.instance.messages.push(new AIMessage('Got it.'));
     }
 
     return OllamaAssistant.instance;
+  }
+
+  public override restart() {
+    super.restart();
+    // need to reset the instance so getInstance doesn't return the same instance
+    OllamaAssistant.instance = null;
   }
 
   public static override async configure({
@@ -65,5 +72,62 @@ export class OllamaAssistant extends LangChainAssistant {
     if (instructions) OllamaAssistant.instructions = instructions;
     if (temperature) OllamaAssistant.temperature = temperature;
     if (topP) OllamaAssistant.topP = topP;
+  }
+
+  public override async processTextMessage({
+    textMessage,
+    streamMessageCallback,
+  }: ProcessMessageProps) {
+    if (this.llm === null) {
+      throw new Error('LLM instance is not initialized');
+    }
+
+    // get the list of tools, and convert to string
+    const tools = OllamaAssistant.tools;
+    const toolsString = JSON.stringify(tools);
+
+    // check with ollama if the prompt can be answered by a tool
+    const checkMessage = `You have the following tools available\n: ${toolsString}\n. Can you answer the following prompt using one of the function in the given tools:\n"${textMessage}".\nPlease respond with one of the two words: "Yes" or "No".`;
+
+    const stream = await this.aiModel.stream([new HumanMessage(checkMessage)]);
+    const chunks: AIMessageChunk[] = [];
+    let message = '';
+
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+      if (chunk.content.length > 0) {
+        message += chunk.content.toString();
+      }
+    }
+    console.log('message', message);
+    const useTool = message.startsWith('Yes') || message.startsWith('"Yes"');
+
+    if (useTool === false) {
+      // use ollama model to answer the question directly
+      this.messages.push(new HumanMessage(textMessage));
+      const stream = await this.aiModel.stream(textMessage);
+      const chunks: AIMessageChunk[] = [];
+      let message = '';
+
+      for await (const chunk of stream) {
+        chunks.push(chunk);
+        if (chunk.content.length > 0) {
+          message += chunk.content.toString();
+          streamMessageCallback({ deltaMessage: message });
+        }
+      }
+
+      // concat all chunks and push to messages
+      let finalChunk = chunks[0];
+      for (const chunk of chunks.slice(1)) {
+        finalChunk = finalChunk.concat(chunk);
+      }
+      this.messages.push(finalChunk);
+
+      streamMessageCallback({ deltaMessage: message, isCompleted: true });
+    } else {
+      // use tool
+      super.processTextMessage({ textMessage, streamMessageCallback, useTool });
+    }
   }
 }
