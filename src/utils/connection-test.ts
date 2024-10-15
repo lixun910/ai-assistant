@@ -23,9 +23,45 @@ export async function testApiKey({
     return testGeminiConnection(apiKey, modelName);
   } else if (modelProvider.toLowerCase() === 'ollama') {
     return testOllamConnection(modelName, baseUrl);
+  } else if (modelProvider.toLowerCase() === 'anthropic') {
+    return testAnthropicConnection(modelName, baseUrl);
   } else {
     return false;
   }
+}
+
+export async function testAnthropicConnection(
+  apiKey: string,
+  modelName: string
+): Promise<boolean> {
+  const result: ConnectionTestResult = {
+    service: 'Anthropic',
+    success: false,
+    message: '',
+  };
+
+  // Test Anthropic connection
+  try {
+    await axios.post(
+      `https://api.anthropic.com/v1/messages`,
+      {
+        model: modelName,
+        messages: [{ role: 'user', content: 'Hello!' }],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+        },
+      }
+    );
+    result.success = true;
+    result.message = 'Connection successful';
+  } catch (error) {
+    result.success = false;
+    result.message = `${error}`;
+  }
+
+  return result.success;
 }
 
 export async function testOpenAIChatGPTConnection(

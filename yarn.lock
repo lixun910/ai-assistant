@@ -29,6 +29,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@anthropic-ai/sdk@npm:^0.27.3":
+  version: 0.27.3
+  resolution: "@anthropic-ai/sdk@npm:0.27.3"
+  dependencies:
+    "@types/node": ^18.11.18
+    "@types/node-fetch": ^2.6.4
+    abort-controller: ^3.0.0
+    agentkeepalive: ^4.2.1
+    form-data-encoder: 1.7.2
+    formdata-node: ^4.3.2
+    node-fetch: ^2.6.7
+  checksum: 8000fc5a4e545057d8711f978a0de59c9a174398a81f700c9d279213790aaa4b2c100f96f2ef79447b8f1f3a04b8f094d60db66a06df8df96b31a3240d69cb5a
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.10.4, @babel/code-frame@npm:^7.12.13, @babel/code-frame@npm:^7.24.7":
   version: 7.24.7
   resolution: "@babel/code-frame@npm:7.24.7"
@@ -1436,6 +1451,20 @@ __metadata:
   peerDependencies:
     tslib: 2
   checksum: a805ca7cf5fc05c6244324a955d96a28797fb8efd60cf22a809a57059de78e4367c72ffb367c82a7ea6ce5622e56f9c696393c5561fbac0fd3c9dc1534d62968
+  languageName: node
+  linkType: hard
+
+"@langchain/anthropic@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@langchain/anthropic@npm:0.3.3"
+  dependencies:
+    "@anthropic-ai/sdk": ^0.27.3
+    fast-xml-parser: ^4.4.1
+    zod: ^3.22.4
+    zod-to-json-schema: ^3.22.4
+  peerDependencies:
+    "@langchain/core": ">=0.2.21 <0.4.0"
+  checksum: 194205197de002b441d419d63c76611a6406e87766dd33b93bc74a13cfa12872226e5d51d4cdacc76f14155176eafd1b26eaf958a3549efdce7cee501a77a841
   languageName: node
   linkType: hard
 
@@ -6466,6 +6495,7 @@ __metadata:
     "@eslint/js": ^9.12.0
     "@google/generative-ai": ^0.17.1
     "@iconify/react": ^5.0.2
+    "@langchain/anthropic": ^0.3.3
     "@langchain/community": ^0.2.31
     "@langchain/core": ^0.2.31
     "@langchain/google-genai": ^0.1.0
@@ -8461,6 +8491,17 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 92cfec0a8dfafd9c7a15fba8f2cc29cd0b62b85f056d99ce448bbcd9f708e18ab2764bda4dd5158364f4145a7c72788538994f0d1787b956ef0d1062b0f7c24c
+  languageName: node
+  linkType: hard
+
+"fast-xml-parser@npm:^4.4.1":
+  version: 4.5.0
+  resolution: "fast-xml-parser@npm:4.5.0"
+  dependencies:
+    strnum: ^1.0.5
+  bin:
+    fxparser: src/cli/cli.js
+  checksum: 696dc98da46f0f48eb26dfe1640a53043ea64f2420056374e62abbb5e620f092f8df3c3ff3195505a2eefab2057db3bf0ebaac63557f277934f6cce4e7da027c
   languageName: node
   linkType: hard
 
@@ -12813,6 +12854,13 @@ __metadata:
   version: 3.1.1
   resolution: "strip-json-comments@npm:3.1.1"
   checksum: 492f73e27268f9b1c122733f28ecb0e7e8d8a531a6662efbd08e22cccb3f9475e90a1b82cab06a392f6afae6d2de636f977e231296400d0ec5304ba70f166443
+  languageName: node
+  linkType: hard
+
+"strnum@npm:^1.0.5":
+  version: 1.0.5
+  resolution: "strnum@npm:1.0.5"
+  checksum: 651b2031db5da1bf4a77fdd2f116a8ac8055157c5420f5569f64879133825915ad461513e7202a16d7fec63c54fd822410d0962f8ca12385c4334891b9ae6dd2
   languageName: node
   linkType: hard
 

@@ -14,6 +14,7 @@ export type AiAssistantProps = UseAssistantProps & {
   theme?: 'dark' | 'light';
   welcomeMessage: string;
   historyMessages?: MessageModel[];
+  ideas?: {title: string; description: string}[];
   userAvatar?: ReactNode | string;
   assistantAvatar?: ReactNode | string;
   isMessageDraggable?: boolean;
@@ -203,6 +204,7 @@ export function AiAssistant(props: AiAssistantProps) {
         </div>
         <div className="flex flex-col gap-2">
           <PromptInputWithBottomActions
+            ideas={props.ideas}
             onSendMessage={onSendMessage}
             onVoiceMessage={onVoiceMessage}
             onScreenshotClick={props.onScreenshotClick}

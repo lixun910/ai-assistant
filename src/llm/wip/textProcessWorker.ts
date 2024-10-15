@@ -3,13 +3,13 @@ import {
   AIMessageChunk,
   ToolMessage,
 } from '@langchain/core/messages';
-import { OpenAIAssistant } from './openai';
-import { GoogleAssistant } from './google';
-import { GPTAssistant } from './chatgpt';
-import { OllamaAssistant } from './ollama';
-import { LangChainAssistant } from './langchain';
+import { OpenAIAssistant } from '../openai';
+import { GoogleAssistant } from '../google';
+import { GPTAssistant } from '../chatgpt';
+import { OllamaAssistant } from '../ollama';
+import { LangChainAssistant } from '../langchain';
 import { ReactNode } from 'react';
-import { CustomFunctionOutputProps } from '../types';
+import { CustomFunctionOutputProps } from '../../types';
 
 // mapping name and classes
 const assistantClasses = {

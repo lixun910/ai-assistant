@@ -8,6 +8,7 @@ import {
 } from '../types';
 import { GoogleAssistant } from '../llm/google';
 import { useState } from 'react';
+import { AnthropicAssistant } from '../llm/anthropic';
 
 /**
  * Props for the useAssistant hook.
@@ -220,6 +221,8 @@ function GetAssistantModelByProvider(provider: string) {
       return GoogleAssistant;
     case 'ollama':
       return OllamaAssistant;
+    case 'anthropic':
+      return AnthropicAssistant;
     default:
       return GPTAssistant;
   }

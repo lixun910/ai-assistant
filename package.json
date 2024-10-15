@@ -60,6 +60,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.17.1",
     "@iconify/react": "^5.0.2",
+    "@langchain/anthropic": "^0.3.3",
     "@langchain/community": "^0.2.31",
     "@langchain/core": "^0.2.31",
     "@langchain/google-genai": "^0.1.0",

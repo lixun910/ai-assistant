@@ -1,48 +1,49 @@
-import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { ChatAnthropic } from '@langchain/anthropic';
 import { LangChainAssistant } from './langchain';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { AudioToTextProps } from '../types';
 
-export class GoogleAssistant extends LangChainAssistant {
-  protected aiModel: ChatGoogleGenerativeAI;
+export class AnthropicAssistant extends LangChainAssistant {
+  protected aiModel: ChatAnthropic;
 
-  protected static instance: GoogleAssistant | null = null;
+  protected static instance: AnthropicAssistant | null = null;
 
   private constructor() {
     super();
 
     // Initialize Google instance
-    this.aiModel = new ChatGoogleGenerativeAI({
-      model: GoogleAssistant.model,
-      apiKey: GoogleAssistant.apiKey,
-      temperature: GoogleAssistant.temperature,
-      topP: GoogleAssistant.topP,
+    this.aiModel = new ChatAnthropic({
+      model: AnthropicAssistant.model,
+      apiKey: AnthropicAssistant.apiKey,
+      temperature: AnthropicAssistant.temperature,
+      topP: AnthropicAssistant.topP,
     });
 
     // add system message from instructions
-    this.messages.push(new SystemMessage(GoogleAssistant.instructions));
+    this.messages.push(new SystemMessage(AnthropicAssistant.instructions));
 
     // bind tools, NOTE: can't use bind() here, it will cause error
-    this.llm = this.aiModel.bindTools(GoogleAssistant.tools);
+    this.llm = this.aiModel.bindTools(AnthropicAssistant.tools);
   }
 
-  public static async getInstance(): Promise<GoogleAssistant> {
-    if (GoogleAssistant.instance === null) {
-      GoogleAssistant.instance = new GoogleAssistant();
+  public static async getInstance(): Promise<AnthropicAssistant> {
+    if (AnthropicAssistant.instance === null) {
+      AnthropicAssistant.instance = new AnthropicAssistant();
     } else if (
-      GoogleAssistant.instance.aiModel.modelName !== GoogleAssistant.model ||
-      GoogleAssistant.instance.aiModel.apiKey !== GoogleAssistant.apiKey
+      AnthropicAssistant.instance.aiModel.modelName !==
+        AnthropicAssistant.model ||
+      AnthropicAssistant.instance.aiModel.apiKey !== AnthropicAssistant.apiKey
     ) {
       // reset the instance if the model or api key is changed
-      GoogleAssistant.instance = new GoogleAssistant();
+      AnthropicAssistant.instance = new AnthropicAssistant();
     }
-    return GoogleAssistant.instance;
+    return AnthropicAssistant.instance;
   }
 
   public override restart() {
     super.restart();
     // need to reset the instance so getInstance doesn't return the same instance
-    GoogleAssistant.instance = null;
+    AnthropicAssistant.instance = null;
   }
 
   private blobToBase64(blob) {

@@ -6,6 +6,7 @@ import PromptInput from './prompt-input';
 import VoiceChatButton from './voice-chat-button';
 
 type PromptInputWithBottomActionsProps = {
+  ideas?: {title: string; description: string}[];
   onSendMessage: (message: string) => void;
   onVoiceMessage: (voice: Blob) => Promise<string>;
   onScreenshotClick?: () => void;
@@ -19,6 +20,7 @@ type PromptInputWithBottomActionsProps = {
 };
 
 export default function Component({
+  ideas,
   onSendMessage,
   onVoiceMessage,
   onScreenshotClick,
@@ -30,8 +32,6 @@ export default function Component({
   onStopChat,
   onRestartChat,
 }: PromptInputWithBottomActionsProps) {
-  const ideas = [];
-
   const [prompt, setPrompt] = React.useState<string>(defaultPromptText);
 
   const onSendClick = () => {
@@ -86,7 +86,7 @@ export default function Component({
         orientation="horizontal"
       >
         <div className="flex gap-2">
-          {ideas.map(({ title, description }, index) => (
+          {ideas?.map(({ title, description }, index) => (
             <Button
               onClick={onClickIdea}
               key={index}

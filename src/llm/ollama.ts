@@ -105,7 +105,7 @@ export class OllamaAssistant extends LangChainAssistant {
     if (useTool === false) {
       // use ollama model to answer the question directly
       this.messages.push(new HumanMessage(textMessage));
-      const stream = await this.aiModel.stream(textMessage);
+      const stream = await this.aiModel.stream(this.messages);
       const chunks: AIMessageChunk[] = [];
       let message = '';
 
