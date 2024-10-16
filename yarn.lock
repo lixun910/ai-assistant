@@ -3150,6 +3150,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nextui-org/use-clipboard@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@nextui-org/use-clipboard@npm:2.0.7"
+  peerDependencies:
+    react: ">=18"
+  checksum: 6d2f6de05af95caab36aa3ae76cdf0c409e6315a792b4b9e84e24a9045a12717de6f1e6ce00e29bb49ce7ad93a1f595f10b306f8dae61b0b50fe80390688d352
+  languageName: node
+  linkType: hard
+
 "@nextui-org/use-data-scroll-overflow@npm:2.1.6":
   version: 2.1.6
   resolution: "@nextui-org/use-data-scroll-overflow@npm:2.1.6"
@@ -6502,6 +6511,7 @@ __metadata:
     "@langchain/ollama": ^0.0.4
     "@langchain/openai": ^0.3.0
     "@nextui-org/react": ^2.4.6
+    "@nextui-org/use-clipboard": ^2.0.7
     "@storybook/addon-essentials": ^8.3.0
     "@storybook/addon-interactions": ^8.3.0
     "@storybook/addon-links": ^8.3.0

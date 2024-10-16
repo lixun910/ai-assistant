@@ -24,7 +24,10 @@ export async function testApiKey({
   } else if (modelProvider.toLowerCase() === 'ollama') {
     return testOllamConnection(modelName, baseUrl);
   } else if (modelProvider.toLowerCase() === 'anthropic') {
-    return testAnthropicConnection(modelName, baseUrl);
+    return testAnthropicConnection(modelName, modelName);
+  } else if (modelProvider.toLowerCase() === 'phoenixai') {
+    // TODO: implement PhoenixAI connection test
+    return false;
   } else {
     return false;
   }
