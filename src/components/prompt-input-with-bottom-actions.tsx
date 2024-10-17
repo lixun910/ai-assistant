@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Tooltip, ScrollShadow, Badge } from '@nextui-org/react';
 import { Icon } from '@iconify/react';
 import { cn } from './cn';
@@ -27,12 +27,12 @@ export default function Component({
   onRemoveScreenshot,
   enableAttachFile,
   screenCaptured,
-  defaultPromptText = '',
+  defaultPromptText,
   status,
   onStopChat,
   onRestartChat,
 }: PromptInputWithBottomActionsProps) {
-  const [prompt, setPrompt] = React.useState<string>(defaultPromptText);
+  const [prompt, setPrompt] = useState<string>('');
 
   const onSendClick = () => {
     onSendMessage(prompt);
@@ -77,6 +77,19 @@ export default function Component({
     const voice = await onVoiceMessage(voiceBlob);
     setPrompt(voice);
   };
+
+  // if screenCaptured is not empty and defaultPromptText is empty, send it
+  useEffect(() => {
+    if (
+      screenCaptured &&
+      screenCaptured.length > 0 &&
+      defaultPromptText &&
+      defaultPromptText.length > 0
+    ) {
+      onSendMessage(defaultPromptText);
+      onRemoveScreenshot?.();
+    }
+  }, [screenCaptured, defaultPromptText, onSendClick]);
 
   return (
     <div className="flex w-full flex-col gap-4">

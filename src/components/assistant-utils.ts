@@ -61,9 +61,15 @@ export async function sendTextMessageHandler({
         ];
         setMessages(newMessages);
         if (isCompleted) {
+          // when the message is completed, set typing indicator to false
           setTypingIndicator(false);
           if (onMessagesUpdated) {
             onMessagesUpdated(newMessages);
+          }
+          // check if the message is empty
+          if (newMessages[newMessages.length - 1]?.message?.length === 0) {
+            newMessages[newMessages.length - 1].message =
+              'Sorry, AI has not provided any response. Please try with a different prompt.';
           }
         }
       },
@@ -151,6 +157,11 @@ export async function sendImageMessageHandler({
           setTypingIndicator(false);
           if (onMessagesUpdated) {
             onMessagesUpdated(newMessages);
+          }
+          // check if the message is empty
+          if (newMessages[newMessages.length - 1]?.message?.length === 0) {
+            newMessages[newMessages.length - 1].message =
+              'Sorry, AI has not provided any response. Please check if image prompt is supported by the selected AI model.';
           }
         }
       },

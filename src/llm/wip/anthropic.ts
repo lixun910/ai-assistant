@@ -1,7 +1,7 @@
 import { ChatAnthropic } from '@langchain/anthropic';
-import { LangChainAssistant } from './langchain';
+import { LangChainAssistant } from '../langchain';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { AudioToTextProps } from '../types';
+import { AudioToTextProps } from '../../types';
 
 export class AnthropicAssistant extends LangChainAssistant {
   protected aiModel: ChatAnthropic;

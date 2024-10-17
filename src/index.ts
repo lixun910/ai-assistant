@@ -6,7 +6,7 @@ export { GoogleAssistant } from './llm/google';
 
 export { OpenAIAssistant } from './llm/openai';
 
-export { AnthropicAssistant } from './llm/anthropic';
+export { AnthropicAssistant } from './llm/wip/anthropic';
 
 export { AiAssistant } from './components/assistant';
 

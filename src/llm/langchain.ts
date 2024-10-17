@@ -277,6 +277,7 @@ export class LangChainAssistant extends AbstractAssistant {
       ],
     });
 
+    // TODO: do we need to add the image message to the messages array as context?
     this.messages.push(newMessage);
 
     const stream = await this.llm.stream(this.messages, {

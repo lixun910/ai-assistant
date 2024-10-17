@@ -14,11 +14,12 @@ export type AiAssistantProps = UseAssistantProps & {
   theme?: 'dark' | 'light';
   welcomeMessage: string;
   historyMessages?: MessageModel[];
-  ideas?: {title: string; description: string}[];
+  ideas?: { title: string; description: string }[];
   userAvatar?: ReactNode | string;
   assistantAvatar?: ReactNode | string;
   isMessageDraggable?: boolean;
   screenCapturedBase64?: string;
+  screenCapturedPrompt?: string;
   onScreenshotClick?: () => void;
   onRemoveScreenshot?: () => void;
   onFeedback?: (question: string) => void;
@@ -55,14 +56,14 @@ export function AiAssistant(props: AiAssistantProps) {
     functions: props.functions,
   });
 
+  const isScreenshotAvailable =
+    props.screenCapturedBase64?.startsWith('data:image');
+
   /**
    * Handles sending a message, either as text or image based on the presence of a screenshot.
    * @param {string} message - The message to be sent.
    */
   const onSendMessage = async (message: string) => {
-    const isScreenshotAvailable =
-      props.screenCapturedBase64?.startsWith('data:image');
-
     const messageHandlerProps = {
       newMessage: message,
       messages,
@@ -78,6 +79,8 @@ export function AiAssistant(props: AiAssistantProps) {
         imageBase64String: props.screenCapturedBase64!,
         sendImageMessage,
       });
+      // delete the screenshot
+      props.onRemoveScreenshot?.();
     } else {
       // Handle text message
       await sendTextMessageHandler({
@@ -202,7 +205,7 @@ export function AiAssistant(props: AiAssistantProps) {
             })}
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-4">
           <PromptInputWithBottomActions
             ideas={props.ideas}
             onSendMessage={onSendMessage}
@@ -210,6 +213,7 @@ export function AiAssistant(props: AiAssistantProps) {
             onScreenshotClick={props.onScreenshotClick}
             onRemoveScreenshot={props.onRemoveScreenshot}
             screenCaptured={props.screenCapturedBase64}
+            defaultPromptText={props.screenCapturedPrompt}
             status={isPrompting ? 'pending' : 'success'}
             onStopChat={onStopChat}
             onRestartChat={onRestartChat}
