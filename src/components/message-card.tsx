@@ -174,7 +174,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
               )}
               {/* show loading spinner */}
               {status === 'pending' && (
-                <Spinner color="default" size="sm" className="p-2" />
+                <Spinner color="default" size="sm" className="p-2" data-testid="spinner-icon" />
               )}
             </div>
             <div className="opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full bg-content2 shadow-small">
@@ -187,6 +187,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                       size="sm"
                       variant="light"
                       onPress={handleCopy}
+                      data-testid="copytext-button"
                     >
                       {copied ? (
                         <Icon
@@ -201,27 +202,6 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                       )}
                     </Button>
                   </Tooltip>
-                  {/* <Tooltip content="Feedback">
-                      <Button
-                        isIconOnly
-                        radius="full"
-                        size="sm"
-                        variant="light"
-                        onPress={() => handleFeedback(index, true)}
-                      >
-                        {feedback === 'like' ? (
-                          <Icon
-                            className="text-lg text-default-600"
-                            icon="gravity-ui:thumbs-up-fill"
-                          />
-                        ) : (
-                          <Icon
-                            className="text-lg text-default-600"
-                            icon="gravity-ui:thumbs-up"
-                          />
-                        )}
-                      </Button>
-                    </Tooltip> */}
                   <Tooltip content="Feedback">
                     <Button
                       isIconOnly
@@ -229,6 +209,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                       size="sm"
                       variant="light"
                       onPress={() => handleFeedback(index, false)}
+                      data-testid="feedback-button"
                     >
                       {feedback === 'dislike' ? (
                         <Icon
@@ -254,6 +235,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                       currentAttempt > 1 ? currentAttempt - 1 : 1
                     )
                   }
+                  data-testid="previous-button"
                 >
                   <Icon
                     className="cursor-pointer text-default-400 hover:text-default-500"
@@ -266,6 +248,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                       currentAttempt < attempts ? currentAttempt + 1 : attempts
                     )
                   }
+                  data-testid="next-button"
                 >
                   <Icon
                     className="cursor-pointer text-default-400 hover:text-default-500"
@@ -291,6 +274,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
                     size="sm"
                     variant="light"
                     onPress={() => handleAttemptFeedback('like')}
+                    data-testid="better-button"
                   >
                     {attemptFeedback === 'like' ? (
                       <Icon

@@ -124,6 +124,7 @@ export default function Component({
                   radius="full"
                   size="sm"
                   variant="light"
+                  data-testid="removescreenshot-button"
                   onPress={onRemoveScreenshot}
                 >
                   <Icon
@@ -160,6 +161,7 @@ export default function Component({
                   radius="lg"
                   size="sm"
                   variant="solid"
+                  data-testid="send-button"
                   onClick={status === 'pending' ? onStopClick : onSendClick}
                 >
                   <Icon
@@ -230,6 +232,7 @@ export default function Component({
                 size="sm"
                 variant="light"
                 onPress={onRestartChatClick}
+                data-testid="restart-button"
               >
                 <Icon
                   className="text-lg text-default-600"

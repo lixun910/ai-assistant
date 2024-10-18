@@ -1,0 +1,338 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="flex w-full flex-col gap-4"
+      >
+        <div
+          class="overflow-x-auto data-[left-scroll=true]:[mask-image:linear-gradient(270deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[right-scroll=true]:[mask-image:linear-gradient(90deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[left-right-scroll=true]:[mask-image:linear-gradient(to_right,#000,#000,transparent_0,#000_var(--scroll-shadow-size),#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] scrollbar-hide flex flex-nowrap gap-2"
+          data-left-scroll="false"
+          data-orientation="horizontal"
+          data-right-scroll="false"
+          style="--scroll-shadow-size: 40px;"
+        >
+          <div
+            class="flex gap-2"
+          >
+            <button
+              class="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-4 min-w-20 text-small rounded-medium [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-foreground data-[hover=true]:opacity-hover flex h-14 flex-col items-start gap-0"
+              type="button"
+            >
+              <p>
+                Idea 1
+              </p>
+              <p
+                class="text-default-500"
+              >
+                Description 1
+              </p>
+            </button>
+          </div>
+        </div>
+        <form
+          class="flex w-full flex-col items-start rounded-medium bg-default-100 transition-colors hover:bg-default-200/70"
+        >
+          <div
+            class="group flex gap-2 px-4 pt-4"
+          />
+          <div
+            class="group flex flex-col data-[hidden=true]:hidden w-full min-h-[40px]"
+            data-filled="true"
+            data-filled-within="true"
+            data-slot="base"
+          >
+            <div
+              class="relative w-full inline-flex tap-highlight-transparent flex-row items-center px-3 gap-3 bg-default-100 data-[hover=true]:bg-default-200 group-data-[focus=true]:bg-default-100 h-10 min-h-10 rounded-large !h-auto transition-background motion-reduce:transition-none !duration-150 outline-none group-data-[focus-visible=true]:z-10 group-data-[focus-visible=true]:ring-2 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-2 group-data-[focus-visible=true]:ring-offset-background py-2 !bg-transparent shadow-none"
+              data-has-multiple-rows="true"
+              data-slot="input-wrapper"
+              style="cursor: text;"
+            >
+              <div
+                class="inline-flex w-full h-full box-border items-start group-data-[has-label=true]:items-start relative"
+                data-slot="inner-wrapper"
+              >
+                <textarea
+                  aria-label="Prompt"
+                  class="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text resize-none data-[hide-scroll=true]:scrollbar-hide group-data-[has-value=true]:text-default-foreground transition-height !duration-100 motion-reduce:transition-none py-0 pt-1 pl-2 pb-6 !pr-10 text-medium"
+                  data-has-end-content="true"
+                  data-hide-scroll="true"
+                  data-slot="input"
+                  id="react-aria-:r0:"
+                  placeholder="Enter a prompt here"
+                />
+                <div
+                  class="flex items-end gap-2"
+                >
+                  <button
+                    class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny gap-2 rounded-large opacity-disabled pointer-events-none px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-8 w-8 h-8 data-[hover=true]:opacity-hover"
+                    data-disabled="true"
+                    data-testid="send-button"
+                    disabled=""
+                    type="button"
+                  >
+                    <svg
+                      class="[&>path]:stroke-[2px] text-default-600"
+                      data-testid="icon"
+                      icon="solar:arrow-up-linear"
+                      width="20"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex w-full items-center justify-between  gap-2 overflow-scroll px-4 pb-4"
+          >
+            <div
+              class="flex w-full gap-1 md:gap-3"
+            >
+              <button
+                class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-small [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-foreground data-[hover=true]:opacity-hover"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="text-default-500"
+                  data-testid="icon"
+                  focusable="false"
+                  icon="solar:gallery-minimalistic-linear"
+                  tabindex="-1"
+                  width="18"
+                />
+                Screenshot to Ask
+              </button>
+              <button
+                class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-small [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-foreground data-[hover=true]:opacity-hover"
+                type="button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="text-default-500"
+                  data-testid="icon"
+                  focusable="false"
+                  icon="solar:soundwave-linear"
+                  tabindex="-1"
+                  width="18"
+                />
+                Talk to Ask
+              </button>
+              <button
+                class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-transparent text-default-foreground data-[hover=true]:bg-default/40 min-w-8 w-8 h-8"
+                data-testid="restart-button"
+                type="button"
+              >
+                <svg
+                  class="text-lg text-default-600"
+                  data-testid="icon"
+                  icon="lucide:list-restart"
+                />
+              </button>
+            </div>
+            <p
+              class="py-1 text-tiny text-default-400"
+            >
+              0
+              /2000
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="flex w-full flex-col gap-4"
+    >
+      <div
+        class="overflow-x-auto data-[left-scroll=true]:[mask-image:linear-gradient(270deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[right-scroll=true]:[mask-image:linear-gradient(90deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[left-right-scroll=true]:[mask-image:linear-gradient(to_right,#000,#000,transparent_0,#000_var(--scroll-shadow-size),#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] scrollbar-hide flex flex-nowrap gap-2"
+        data-left-scroll="false"
+        data-orientation="horizontal"
+        data-right-scroll="false"
+        style="--scroll-shadow-size: 40px;"
+      >
+        <div
+          class="flex gap-2"
+        >
+          <button
+            class="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-4 min-w-20 text-small rounded-medium [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-foreground data-[hover=true]:opacity-hover flex h-14 flex-col items-start gap-0"
+            type="button"
+          >
+            <p>
+              Idea 1
+            </p>
+            <p
+              class="text-default-500"
+            >
+              Description 1
+            </p>
+          </button>
+        </div>
+      </div>
+      <form
+        class="flex w-full flex-col items-start rounded-medium bg-default-100 transition-colors hover:bg-default-200/70"
+      >
+        <div
+          class="group flex gap-2 px-4 pt-4"
+        />
+        <div
+          class="group flex flex-col data-[hidden=true]:hidden w-full min-h-[40px]"
+          data-filled="true"
+          data-filled-within="true"
+          data-slot="base"
+        >
+          <div
+            class="relative w-full inline-flex tap-highlight-transparent flex-row items-center px-3 gap-3 bg-default-100 data-[hover=true]:bg-default-200 group-data-[focus=true]:bg-default-100 h-10 min-h-10 rounded-large !h-auto transition-background motion-reduce:transition-none !duration-150 outline-none group-data-[focus-visible=true]:z-10 group-data-[focus-visible=true]:ring-2 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-2 group-data-[focus-visible=true]:ring-offset-background py-2 !bg-transparent shadow-none"
+            data-has-multiple-rows="true"
+            data-slot="input-wrapper"
+            style="cursor: text;"
+          >
+            <div
+              class="inline-flex w-full h-full box-border items-start group-data-[has-label=true]:items-start relative"
+              data-slot="inner-wrapper"
+            >
+              <textarea
+                aria-label="Prompt"
+                class="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text resize-none data-[hide-scroll=true]:scrollbar-hide group-data-[has-value=true]:text-default-foreground transition-height !duration-100 motion-reduce:transition-none py-0 pt-1 pl-2 pb-6 !pr-10 text-medium"
+                data-has-end-content="true"
+                data-hide-scroll="true"
+                data-slot="input"
+                id="react-aria-:r0:"
+                placeholder="Enter a prompt here"
+              />
+              <div
+                class="flex items-end gap-2"
+              >
+                <button
+                  class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny gap-2 rounded-large opacity-disabled pointer-events-none px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground min-w-8 w-8 h-8 data-[hover=true]:opacity-hover"
+                  data-disabled="true"
+                  data-testid="send-button"
+                  disabled=""
+                  type="button"
+                >
+                  <svg
+                    class="[&>path]:stroke-[2px] text-default-600"
+                    data-testid="icon"
+                    icon="solar:arrow-up-linear"
+                    width="20"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex w-full items-center justify-between  gap-2 overflow-scroll px-4 pb-4"
+        >
+          <div
+            class="flex w-full gap-1 md:gap-3"
+          >
+            <button
+              class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-small [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-foreground data-[hover=true]:opacity-hover"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="text-default-500"
+                data-testid="icon"
+                focusable="false"
+                icon="solar:gallery-minimalistic-linear"
+                tabindex="-1"
+                width="18"
+              />
+              Screenshot to Ask
+            </button>
+            <button
+              class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-3 min-w-16 h-8 text-tiny gap-2 rounded-small [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-foreground data-[hover=true]:opacity-hover"
+              type="button"
+            >
+              <svg
+                aria-hidden="true"
+                class="text-default-500"
+                data-testid="icon"
+                focusable="false"
+                icon="solar:soundwave-linear"
+                tabindex="-1"
+                width="18"
+              />
+              Talk to Ask
+            </button>
+            <button
+              class="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 text-tiny gap-2 rounded-full px-0 !gap-0 transition-transform-colors-opacity motion-reduce:transition-none bg-transparent text-default-foreground data-[hover=true]:bg-default/40 min-w-8 w-8 h-8"
+              data-testid="restart-button"
+              type="button"
+            >
+              <svg
+                class="text-lg text-default-600"
+                data-testid="icon"
+                icon="lucide:list-restart"
+              />
+            </button>
+          </div>
+          <p
+            class="py-1 text-tiny text-default-400"
+          >
+            0
+            /2000
+          </p>
+        </div>
+      </form>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

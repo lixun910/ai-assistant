@@ -13,8 +13,10 @@ const config: Config.InitialOptions = {
     ],
   },
   moduleNameMapper: {
-    'react-audio-voice-recorder': '<rootDir>/src/__mocks__/react-audio-voice-recorder.ts',
+    'react-audio-voice-recorder':
+      '<rootDir>/src/__mocks__/react-audio-voice-recorder.ts',
   },
+  setupFiles: ['<rootDir>/src/__test__/jest.setup.ts'],
 };
 
 export default config;
