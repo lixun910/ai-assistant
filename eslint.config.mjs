@@ -11,7 +11,7 @@ export default [
       'tailwind.config.js',
       'postcss.config.js',
       'vite.config.ts',
-      'test/quick-test.ts',
+      'tests/quick-test.ts',
       'dist/',
     ],
   },
