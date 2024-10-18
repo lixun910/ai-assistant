@@ -17,12 +17,16 @@ export default function VoiceChatButton({
       (err) => console.table(err) // onNotAllowedOrFound
     );
 
+  const [recording, setRecording] = useState(isRecording);
+
   const onTalkClicked = async () => {
-    if (isRecording) {
+    if (recording) {
       stopRecording();
       setShouldSave(true);
+      setRecording(false);
     } else {
       startRecording();
+      setRecording(true);
     }
   };
 
