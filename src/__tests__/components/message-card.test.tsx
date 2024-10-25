@@ -4,7 +4,7 @@
 import '@testing-library/jest-dom';
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import MessageCard, { MessageCardProps } from '../../components/message-card';
 
 describe('MessageCard Component', () => {
@@ -48,23 +48,29 @@ describe('MessageCard Component', () => {
     expect(screen.getByTestId('spinner-icon')).toBeInTheDocument();
   });
 
-  it('calls onMessageCopy when copy button is clicked', () => {
+  it('calls onMessageCopy when copy button is clicked', async () => {
     const onMessageCopy = jest.fn();
-    render(<MessageCard {...defaultProps} onMessageCopy={onMessageCopy} />);
+    await act(async () => {
+      render(<MessageCard {...defaultProps} onMessageCopy={onMessageCopy} />);
+    });
     const copyButton = screen.getByTestId('copytext-button');
-    fireEvent.click(copyButton);
+    await act(async () => {
+      fireEvent.click(copyButton);
+    });
     expect(onMessageCopy).toHaveBeenCalledWith('Test message');
   });
 
-  it('calls onFeedback when feedback button is clicked', () => {
+  it('calls onFeedback when feedback button is clicked', async () => {
     const onFeedback = jest.fn();
     render(<MessageCard {...defaultProps} onFeedback={onFeedback} />);
     const feedbackButton = screen.getByTestId('feedback-button');
-    fireEvent.click(feedbackButton);
+    await act(async () => {
+      fireEvent.click(feedbackButton);
+    });
     expect(onFeedback).toHaveBeenCalledWith(0);
   });
 
-  it('renders attempt navigation when attempts > 1', () => {
+  it('renders attempt navigation when attempts > 1', async () => {
     const onAttemptChange = jest.fn();
     render(
       <MessageCard
@@ -76,13 +82,17 @@ describe('MessageCard Component', () => {
     );
     const prevButton = screen.getByTestId('previous-button');
     const nextButton = screen.getByTestId('next-button');
-    fireEvent.click(prevButton);
+    await act(async () => {
+      fireEvent.click(prevButton);
+    });
     expect(onAttemptChange).toHaveBeenCalledWith(1);
-    fireEvent.click(nextButton);
+    await act(async () => {
+      fireEvent.click(nextButton);
+    });
     expect(onAttemptChange).toHaveBeenCalledWith(3);
   });
 
-  it('renders attempt feedback when showFeedback is true and attempts > 1', () => {
+  it('renders attempt feedback when showFeedback is true and attempts > 1', async () => {
     const onAttemptFeedback = jest.fn();
     render(
       <MessageCard
@@ -95,7 +105,9 @@ describe('MessageCard Component', () => {
       screen.getByText(/Was this response better or worse?/i)
     ).toBeInTheDocument();
     const betterButton = screen.getByTestId('better-button');
-    fireEvent.click(betterButton);
+    await act(async () => {
+      fireEvent.click(betterButton);
+    });
     expect(onAttemptFeedback).toHaveBeenCalledWith('like');
   });
 

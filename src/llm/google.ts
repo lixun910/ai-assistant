@@ -4,7 +4,7 @@ import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { AudioToTextProps } from '../types';
 
 export class GoogleAssistant extends LangChainAssistant {
-  protected aiModel: ChatGoogleGenerativeAI;
+  protected aiModel: ChatGoogleGenerativeAI | null = null;
 
   protected static instance: GoogleAssistant | null = null;
 
@@ -27,14 +27,27 @@ export class GoogleAssistant extends LangChainAssistant {
   }
 
   public static async getInstance(): Promise<GoogleAssistant> {
+    // check if model and api key are set
+    LangChainAssistant.checkModel();
+    LangChainAssistant.checkApiKey();
+
     if (GoogleAssistant.instance === null) {
       GoogleAssistant.instance = new GoogleAssistant();
     } else if (
-      GoogleAssistant.instance.aiModel.modelName !== GoogleAssistant.model ||
-      GoogleAssistant.instance.aiModel.apiKey !== GoogleAssistant.apiKey
+      LangChainAssistant.isModelChanged(
+        GoogleAssistant.instance.aiModel?.modelName
+      ) ||
+      LangChainAssistant.isApiKeyChanged(
+        GoogleAssistant.instance.aiModel?.apiKey
+      )
     ) {
-      // reset the instance if the model or api key is changed
-      GoogleAssistant.instance = new GoogleAssistant();
+      // reset the aiModel if the model or api key is changed
+      GoogleAssistant.instance.aiModel = new ChatGoogleGenerativeAI({
+        model: GoogleAssistant.model,
+        apiKey: GoogleAssistant.apiKey,
+        temperature: GoogleAssistant.temperature,
+        topP: GoogleAssistant.topP,
+      });
     }
     return GoogleAssistant.instance;
   }

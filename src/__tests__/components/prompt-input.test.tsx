@@ -2,12 +2,16 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom';
-import { render} from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import React from 'react';
 import PromptInput from '../../components/prompt-input';
 
-test('renders correctly', () => {
-  const { container } = render(<PromptInput />);
+test('renders correctly', async () => {
+  let container;
+  await act(async () => {
+    const result = render(<PromptInput />);
+    container = result.container;
+  });
   expect(container).toMatchSnapshot();
 });
 

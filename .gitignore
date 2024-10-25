@@ -8,3 +8,4 @@ node_modules
 src/stories
 .env.local
 .env
+coverage

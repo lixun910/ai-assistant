@@ -179,6 +179,7 @@ export function AiAssistant(props: AiAssistantProps) {
                 <MessageCard
                   key={i}
                   index={i}
+                  data-testid="message-card"
                   avatar={getAvatar(message.direction)}
                   currentAttempt={i === 1 ? 2 : 1}
                   message={messageElement}

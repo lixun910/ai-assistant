@@ -6666,6 +6666,7 @@ __metadata:
     typescript: ^5.5.4
     typescript-eslint: ^8.8.1
     vite: ^5.4.4
+    web-streams-polyfill: ^4.0.0
     zod: ^3.23.8
   languageName: unknown
   linkType: soft
@@ -14211,6 +14212,13 @@ __metadata:
   version: 4.0.0-beta.3
   resolution: "web-streams-polyfill@npm:4.0.0-beta.3"
   checksum: dfec1fbf52b9140e4183a941e380487b6c3d5d3838dd1259be81506c1c9f2abfcf5aeb670aeeecfd9dff4271a6d8fef931b193c7bedfb42542a3b05ff36c0d16
+  languageName: node
+  linkType: hard
+
+"web-streams-polyfill@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "web-streams-polyfill@npm:4.0.0"
+  checksum: df1abcb0f811621fa3ed95491c3d281eb7c82aa898b9759e47c3c9dffe73eb65c0459433da60a76a1ea08e6158c8b33fdf3a2ea2a44b9c4c252965507d54edc4
   languageName: node
   linkType: hard
 

@@ -82,6 +82,7 @@ export default function VoiceChatButton({
       }
       variant="flat"
       onClick={onTalkClicked}
+      data-testid="voice-chat-button"
     >
       Talk to Ask
     </Button>

@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import React from 'react';
+import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 jest.mock('react-audio-voice-recorder');
 
@@ -24,20 +24,28 @@ describe('VoiceChatButton', () => {
     expect(container).toMatchSnapshot();
   });
 
-  it('starts recording on button click', () => {
+  it('starts recording on button click', async () => {
     const { startRecording } = useAudioRecorder();
-    render(<VoiceChatButton onRecordingComplete={jest.fn()} />);
+    await act(async () => {
+      render(<VoiceChatButton onRecordingComplete={jest.fn()} />);
+    });
 
-    fireEvent.click(screen.getByText('Talk to Ask'));
+    await act(async () => {
+      fireEvent.click(screen.getByText('Talk to Ask'));
+    });
     expect(startRecording).toHaveBeenCalled();
   });
 
-  it('stops recording on button click when already recording', () => {
+  it('stops recording on button click when already recording', async () => {
     const { stopRecording } = useAudioRecorder();
     render(<VoiceChatButton onRecordingComplete={jest.fn()} />);
 
-    fireEvent.click(screen.getByText('Talk to Ask'));
-    fireEvent.click(screen.getByText('Talk to Ask'));
+    await act(async () => {
+      fireEvent.click(screen.getByText('Talk to Ask'));
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByText('Talk to Ask'));
+    });
     expect(stopRecording).toHaveBeenCalled();
   });
 
@@ -45,8 +53,12 @@ describe('VoiceChatButton', () => {
     const mockOnRecordingComplete = jest.fn();
     render(<VoiceChatButton onRecordingComplete={mockOnRecordingComplete} />);
 
-    fireEvent.click(screen.getByText('Talk to Ask')); // Start recording
-    fireEvent.click(screen.getByText('Talk to Ask')); // Stop recording
+    await act(async () => {
+      fireEvent.click(screen.getByText('Talk to Ask')); // Start recording
+    });
+    await act(async () => {
+      fireEvent.click(screen.getByText('Talk to Ask')); // Stop recording
+    });
 
     expect(mockOnRecordingComplete).toHaveBeenCalledWith(expect.any(Blob));
   });

@@ -52,13 +52,14 @@ export default function Component({
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.shiftKey) {
       setIsShiftPressed(true);
-    }
-    if (event.key === 'Enter' && isShiftPressed) {
-      if (prompt.length > 0) {
-        onSendClick();
+    } else {
+      if (event.key === 'Enter' && isShiftPressed) {
+        if (prompt.length > 0) {
+          onSendClick();
+        }
+        // prevent new line
+        event.preventDefault();
       }
-      // prevent new line
-      event.preventDefault();
     }
   };
 
@@ -161,7 +162,7 @@ export default function Component({
                   radius="lg"
                   size="sm"
                   variant="solid"
-                  data-testid="send-button"
+                  data-testid={status === 'pending' ? "stop-button" : "send-button"}
                   onClick={status === 'pending' ? onStopClick : onSendClick}
                 >
                   <Icon
@@ -204,6 +205,7 @@ export default function Component({
               }
               variant="flat"
               onClick={onScreenshotClick}
+              data-testid="screenshot-button"
             >
               Screenshot to Ask
             </Button>

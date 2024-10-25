@@ -2,7 +2,6 @@ import {
   AudioToTextProps,
   CustomFunctionOutputProps,
   CustomFunctions,
-  OpenAIConfigProps,
   ProcessImageMessageProps,
   ProcessMessageProps,
   RegisterFunctionCallingProps,
@@ -19,7 +18,10 @@ export class GPTAssistant extends AbstractAssistant {
 
   private thread: OpenAI.Beta.Threads.Thread | null = null;
 
-  private assistant: OpenAI.Beta.Assistants.Assistant | undefined = undefined;
+  private assistant: OpenAI.Beta.Assistants.Assistant | null = null;
+
+  private cachedAssistantList: OpenAI.Beta.Assistants.AssistantsPage | null =
+    null;
 
   private mutex = new Mutex();
 
@@ -47,25 +49,66 @@ export class GPTAssistant extends AbstractAssistant {
   }
 
   private async findAssistant() {
-    const assistants = await this.openai.beta.assistants.list();
-    return (this.assistant = assistants.data.find(
-      (assistant) => assistant.name === GPTAssistant.openAIAssistentBody?.name
-    ));
+    if (!this.cachedAssistantList) {
+      this.cachedAssistantList = await this.openai.beta.assistants.list();
+    }
+
+    // find assistant from openai server
+    this.assistant =
+      this.cachedAssistantList.data.find(
+        (assistant) => assistant.name === GPTAssistant.openAIAssistentBody?.name
+      ) ?? null;
+
+    // create assistant if not found using the openAIAssistentBody
+    if (!this.assistant) {
+      this.assistant = await this.openai.beta.assistants.create(
+        GPTAssistant.openAIAssistentBody
+      );
+      // reset cached assistant list, so next time it will be fetched from openai server
+      this.cachedAssistantList = null;
+    }
+
+    return this.assistant;
   }
 
   private async createThread() {
     this.thread = await this.openai.beta.threads.create();
   }
 
+  /**
+   * Check if the assistant is not latest using version in metadata
+   * @param assistant
+   * @returns
+   */
   private static needUpdateAssistant(
     assistant: OpenAI.Beta.Assistants.Assistant
   ) {
     const versionExisted =
       assistant.metadata &&
       typeof assistant.metadata === 'object' &&
-      'version' in assistant.metadata;
+      'version' in assistant.metadata &&
+      GPTAssistant.openAIAssistentBody.metadata &&
+      typeof GPTAssistant.openAIAssistentBody.metadata === 'object' &&
+      'version' in GPTAssistant.openAIAssistentBody.metadata &&
+      GPTAssistant.openAIAssistentBody.metadata.version !== '';
+
+    const modelChanged =
+      assistant.model !== undefined &&
+      GPTAssistant.openAIModel !== undefined &&
+      assistant.model !== GPTAssistant.openAIModel;
+
+    const temperatureChanged =
+      GPTAssistant.openAIAssistentBody.temperature !== undefined &&
+      assistant.temperature !== undefined &&
+      assistant.temperature !== GPTAssistant.openAIAssistentBody.temperature;
+
+    const top_pChanged =
+      GPTAssistant.openAIAssistentBody.top_p !== undefined &&
+      assistant.top_p !== undefined &&
+      assistant.top_p !== GPTAssistant.openAIAssistentBody.top_p;
 
     const versionChanged =
+      versionExisted &&
       assistant.metadata &&
       typeof assistant.metadata === 'object' &&
       'version' in assistant.metadata &&
@@ -75,48 +118,60 @@ export class GPTAssistant extends AbstractAssistant {
       GPTAssistant.openAIAssistentBody.metadata?.version !==
         assistant.metadata?.version;
 
-    return !versionExisted || versionChanged;
+    return versionChanged || modelChanged || temperatureChanged || top_pChanged;
+  }
+
+  private static checkOpenAIKey() {
+    if (!GPTAssistant.openAIKey || GPTAssistant.openAIKey === '') {
+      throw new Error('OpenAI API key is not set');
+    }
+  }
+
+  private static checkOpenAIModel() {
+    if (!GPTAssistant.openAIModel || GPTAssistant.openAIModel === '') {
+      throw new Error('OpenAI model is not set');
+    }
+  }
+
+  private static checkOpenAIAssistantName() {
+    if (
+      !GPTAssistant.openAIAssistentBody ||
+      !GPTAssistant.openAIAssistentBody.name ||
+      GPTAssistant.openAIAssistentBody.name === ''
+    ) {
+      throw new Error('OpenAI assistant name is not set');
+    }
   }
 
   public static async getInstance(): Promise<GPTAssistant> {
-    // check if openAIkey is set
-    if (
-      !GPTAssistant.openAIKey ||
-      !GPTAssistant.openAIModel ||
-      !GPTAssistant.openAIAssistentBody
-    ) {
-      throw new Error(
-        'OpenAI is not configured. Please call OpenAIHelper.configure() first.'
-      );
-    }
+    // check configure
+    GPTAssistant.checkOpenAIKey();
+    GPTAssistant.checkOpenAIModel();
+    GPTAssistant.checkOpenAIAssistantName();
     if (!GPTAssistant.instance) {
       // create singleton instance
       GPTAssistant.instance = new GPTAssistant();
+    }
 
+    if (!GPTAssistant.instance.thread) {
       // create thread
       await GPTAssistant.instance.createThread();
-
-      // find assistant
-      const assistant = await GPTAssistant.instance.findAssistant();
-
-      // create or update GeoDa.Ai assistant if needed
-      if (!assistant) {
-        GPTAssistant.instance.assistant =
-          await GPTAssistant.instance.openai.beta.assistants.create(
-            GPTAssistant.openAIAssistentBody
-          );
-      } else {
-        // check if assistant is latest
-        const assistantId = assistant.id;
-        if (GPTAssistant.needUpdateAssistant(assistant)) {
-          GPTAssistant.instance.assistant =
-            await GPTAssistant.instance.openai.beta.assistants.update(
-              assistantId,
-              GPTAssistant.openAIAssistentBody
-            );
-        }
-      }
     }
+
+    // find assistant from openai or create a new one if not found
+    const assistant = await GPTAssistant.instance.findAssistant();
+
+    if (assistant && GPTAssistant.needUpdateAssistant(assistant)) {
+      // update assistant if needed based on the version in metadata
+      GPTAssistant.instance.assistant =
+        await GPTAssistant.instance.openai.beta.assistants.update(
+          assistant.id,
+          GPTAssistant.openAIAssistentBody
+        );
+      // reset cached assistant list, so next time it will be fetched from openai server
+      GPTAssistant.instance.cachedAssistantList = null;
+    }
+
     return GPTAssistant.instance;
   }
 
@@ -157,25 +212,34 @@ export class GPTAssistant extends AbstractAssistant {
   }
 
   public static override configure({
-    apiKey,
     model,
-    temperature,
-    top_p,
+    apiKey,
+    instructions,
     name,
     description,
-    instructions,
     version,
-  }: OpenAIConfigProps) {
-    GPTAssistant.openAIKey = apiKey;
-    GPTAssistant.openAIModel = model;
+    temperature,
+    top_p,
+  }: {
+    name: string;
+    model: string;
+    apiKey: string;
+    version?: string;
+    instructions?: string;
+    description?: string;
+    temperature?: number;
+    top_p?: number;
+  }) {
+    GPTAssistant.openAIKey = apiKey || '';
+    GPTAssistant.openAIModel = model || '';
 
     GPTAssistant.openAIAssistentBody = {
-      model: model,
-      name: name,
-      description: description,
-      instructions: instructions,
+      model: model || '',
+      name: name || '',
+      description: description || '',
+      instructions: instructions || '',
       metadata: {
-        version: version,
+        version: version || '',
       },
       temperature: temperature || 1.0,
       top_p: top_p || 0.8,
@@ -267,13 +331,10 @@ export class GPTAssistant extends AbstractAssistant {
     }
     const release = await this.mutex.acquire();
     try {
-      await this.openai.beta.threads.messages.create(
-        this.thread.id,
-        {
-          role: 'user',
-          content: context + '\n Please do not respond to this message.',
-        }
-      );
+      await this.openai.beta.threads.messages.create(this.thread.id, {
+        role: 'user',
+        content: context + '\n Please do not respond to this message.',
+      });
 
       const run = await this.openai.beta.threads.runs.createAndPoll(
         this.thread.id,
@@ -317,22 +378,23 @@ export class GPTAssistant extends AbstractAssistant {
     // reset last message
     this.lastMessage = '';
     // request chat completion
-    await this.openai.beta.chat.completions
-      .stream({
-        model: GPTAssistant.openAIModel,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: textMessage,
-              },
-              imageMessageContent,
-            ],
-          },
-        ],
-      })
+    const stream = await this.openai.beta.chat.completions.stream({
+      model: GPTAssistant.openAIModel,
+      messages: [
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: textMessage,
+            },
+            imageMessageContent,
+          ],
+        },
+      ],
+    });
+
+    stream
       .on('chunk', (chunk) => {
         const delta = chunk.choices[0]?.delta?.content || '';
         this.lastMessage += delta;
@@ -364,6 +426,7 @@ export class GPTAssistant extends AbstractAssistant {
       streamMessageCallback({
         deltaMessage:
           'Sorry, the connection is not established. Please try again later.',
+        isCompleted: true,
       });
       return;
     }
@@ -504,7 +567,7 @@ export class GPTAssistant extends AbstractAssistant {
           args: functionArgs,
           result: {
             success: false,
-            details: `The function "${functionName}" is not executed. You can contact GeoDa.AI team for assistance. The error message is: ${err}`,
+            details: `The function "${functionName}" is not executed. The error message is: ${err}`,
           },
         });
       }

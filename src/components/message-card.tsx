@@ -1,4 +1,12 @@
-import React, { ReactNode } from 'react';
+import React, {
+  forwardRef,
+  HTMLAttributes,
+  isValidElement,
+  ReactNode,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import {
   Avatar,
   Badge,
@@ -12,11 +20,11 @@ import { Icon } from '@iconify/react';
 import { cn } from './cn';
 import { MessagePayload } from '../types';
 
-export type MessageCardProps = React.HTMLAttributes<HTMLDivElement> & {
+export type MessageCardProps = HTMLAttributes<HTMLDivElement> & {
   index: number;
   avatar?: ReactNode | string;
   showFeedback?: boolean;
-  message?: React.ReactNode | string;
+  message?: ReactNode | string;
   customMessage?: MessagePayload;
   currentAttempt?: number;
   status?: 'success' | 'failed' | 'pending';
@@ -28,7 +36,7 @@ export type MessageCardProps = React.HTMLAttributes<HTMLDivElement> & {
   onAttemptFeedback?: (feedback: 'like' | 'dislike' | 'same') => void;
 };
 
-const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
+const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
   (
     {
       index,
@@ -49,12 +57,12 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
     },
     ref
   ) => {
-    const [feedback, setFeedback] = React.useState<'like' | 'dislike'>();
-    const [attemptFeedback, setAttemptFeedback] = React.useState<
+    const [feedback, setFeedback] = useState<'like' | 'dislike'>();
+    const [attemptFeedback, setAttemptFeedback] = useState<
       'like' | 'dislike' | 'same'
     >();
 
-    const messageRef = React.useRef<HTMLDivElement>(null);
+    const messageRef = useRef<HTMLDivElement>(null);
 
     const { copied, copy } = useClipboard();
 
@@ -63,7 +71,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
         ? 'bg-danger-100/50 border border-danger-100 text-foreground'
         : '';
     const failedMessage = (
-      <p className="mb-2">
+      <p className="mb-2" data-testid="failed-message">
         Sorry, something went wrong. If the issue persists please contact us
         through our help center at&nbsp;
         <Link target="_blank" href="https://github.com" size="sm">
@@ -74,32 +82,33 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
 
     const hasFailed = status === 'failed';
 
-    const handleCopy = React.useCallback(() => {
+    const handleCopy = useCallback(() => {
       let stringValue = '';
 
       if (typeof message === 'string') {
         stringValue = message;
-      } else if (Array.isArray(message)) {
-        message.forEach((child) => {
-          const childString =
-            typeof child === 'string'
-              ? child
-              : child?.props?.children?.toString();
-
-          if (childString) {
-            stringValue += childString + '\n';
-          }
-        });
       }
+      // else if (Array.isArray(message)) {
+      //   message.forEach((child) => {
+      //     const childString =
+      //       typeof child === 'string'
+      //         ? child
+      //         : child?.props?.children?.toString();
 
-      const valueToCopy = stringValue || messageRef.current?.textContent || '';
+      //     if (childString) {
+      //       stringValue += childString + '\n';
+      //     }
+      //   });
+      // }
+
+      const valueToCopy = stringValue;
 
       copy(valueToCopy);
 
       onMessageCopy?.(valueToCopy);
     }, [copy, message, onMessageCopy]);
 
-    const handleFeedback = React.useCallback(
+    const handleFeedback = useCallback(
       (index: number, liked: boolean) => {
         setFeedback(liked ? 'like' : 'dislike');
         if (liked === false) {
@@ -109,7 +118,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
       [onFeedback]
     );
 
-    const handleAttemptFeedback = React.useCallback(
+    const handleAttemptFeedback = useCallback(
       (feedback: 'like' | 'dislike' | 'same') => {
         setAttemptFeedback(feedback);
 
@@ -169,12 +178,17 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
               {message}
               {/* <Markdown className="flex flex-col gap-4">{message as string}</Markdown> */}
               {/* show custom message */}
-              {customMessage && React.isValidElement(customMessage) && (
+              {customMessage && isValidElement(customMessage) && (
                 <>{customMessage}</>
               )}
               {/* show loading spinner */}
               {status === 'pending' && (
-                <Spinner color="default" size="sm" className="p-2" data-testid="spinner-icon" />
+                <Spinner
+                  color="default"
+                  size="sm"
+                  className="p-2"
+                  data-testid="spinner-icon"
+                />
               )}
             </div>
             <div className="opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full bg-content2 shadow-small">

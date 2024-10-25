@@ -45,6 +45,10 @@ describe('PromptInputWithBottomActions Component', () => {
     status: 'success' as 'success' | 'failed' | 'pending' | undefined,
   };
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders without crashing', () => {
     const container = render(
       <PromptInputWithBottomActions {...defaultProps} />
@@ -55,51 +59,59 @@ describe('PromptInputWithBottomActions Component', () => {
     expect(screen.getByText('Screenshot to Ask')).toBeInTheDocument();
   });
 
-  it('calls onSendMessage when send button is clicked', () => {
-    render(<PromptInputWithBottomActions {...defaultProps} />);
+  it('calls onSendMessage when send button is clicked', async () => {
+    await act(async () => {
+      render(<PromptInputWithBottomActions {...defaultProps} />);
+    });
 
-    // Check the send button
-    const sendButton = screen.getByTestId('send-button'); // Use a data-testid
-    const icon = sendButton.querySelector('.text-default-600');
-    expect(icon).toBeInTheDocument();
+    const sendButton = screen.getByTestId('send-button');
+    expect(sendButton).toBeDisabled();
 
-    // Simulate input message "Test message"
     const input = screen.getByRole('textbox');
-    fireEvent.change(input, { target: { value: 'Test message' } });
+    await act(async () => {
+      fireEvent.change(input, { target: { value: 'Test message' } });
+    });
 
-    // Simulate send click
-    fireEvent.click(sendButton);
+    expect(sendButton).toBeEnabled();
+
+    await act(async () => {
+      fireEvent.click(sendButton);
+    });
     expect(mockOnSendMessage).toHaveBeenCalledWith('Test message');
   });
 
-  it('calls onStopChat when stop button is clicked', () => {
+  it('calls onStopChat when stop button is clicked', async () => {
     render(<PromptInputWithBottomActions {...defaultProps} status="pending" />);
 
-    // Check the send button should becomes stop button
-    const stopButton = screen.getByTestId('send-button');
+    const stopButton = screen.getByTestId('stop-button');
     const icon = stopButton.querySelector('.text-primary-foreground');
     expect(icon).toBeInTheDocument();
 
-    // Simulate stop click
-    fireEvent.click(stopButton);
+    await act(async () => {
+      fireEvent.click(stopButton);
+    });
     expect(mockOnStopChat).toHaveBeenCalled();
   });
 
-  it('calls onRestartChat when restart button is clicked', () => {
+  it('calls onRestartChat when restart button is clicked', async () => {
     render(<PromptInputWithBottomActions {...defaultProps} />);
     const restartButton = screen.getByTestId('restart-button');
-    fireEvent.click(restartButton);
+    await act(async () => {
+      fireEvent.click(restartButton);
+    });
     expect(mockOnRestartChat).toHaveBeenCalled();
   });
 
-  it('displays ideas and allows clicking on them', () => {
+  it('displays ideas and allows clicking on them', async () => {
     render(<PromptInputWithBottomActions {...defaultProps} />);
     const ideaButton = screen.getByText('Idea 1');
-    fireEvent.click(ideaButton);
+    await act(async () => {
+      fireEvent.click(ideaButton);
+    });
     expect(screen.getByRole('textbox')).toHaveValue('Idea 1Description 1');
   });
 
-  it('calls onRemoveScreenshot when remove screenshot button is clicked', () => {
+  it('calls onRemoveScreenshot when remove screenshot button is clicked', async () => {
     render(
       <PromptInputWithBottomActions
         {...defaultProps}
@@ -107,7 +119,9 @@ describe('PromptInputWithBottomActions Component', () => {
       />
     );
     const removeButton = screen.getByTestId('removescreenshot-button');
-    fireEvent.click(removeButton);
+    await act(async () => {
+      fireEvent.click(removeButton);
+    });
     expect(mockOnRemoveScreenshot).toHaveBeenCalled();
   });
 
@@ -129,5 +143,69 @@ describe('PromptInputWithBottomActions Component', () => {
 
     expect(mockOnSendMessage).toHaveBeenCalledWith('how to use this?');
     expect(mockOnRemoveScreenshot).toHaveBeenCalled();
+  });
+
+  it('calls onSendMessage when typing in the input and hitting Shift+Enter', async () => {
+    render(<PromptInputWithBottomActions {...defaultProps} />);
+    const input = screen.getByRole('textbox');
+    await act(async () => {
+      fireEvent.change(input, { target: { value: 'Test message' } });
+    });
+    await act(async () => {
+      fireEvent.keyDown(input, { shiftKey: true });
+    });
+    await act(async () => {
+      fireEvent.keyDown(input, { key: 'Enter' });
+    });
+
+    expect(mockOnSendMessage).toHaveBeenCalledWith('Test message');
+
+    await act(async () => {
+      fireEvent.keyUp(input, { shiftKey: true});
+    });
+    await act(async () => {
+      fireEvent.keyUp(input, { key: 'Enter' });
+    });
+
+    mockOnSendMessage.mockClear();
+    await act(async () => {
+      fireEvent.keyDown(input, { key: 'Enter' });
+    });
+    expect(mockOnSendMessage).not.toHaveBeenCalled();
+  });
+
+  it('does not call onSendMessage when hitting Shift+Enter without text', async () => {
+    render(<PromptInputWithBottomActions {...defaultProps} />);
+    const input = screen.getByRole('textbox');
+    await act(async () => {
+      fireEvent.keyDown(input, { shiftKey: true });
+    });
+    await act(async () => {
+      fireEvent.keyDown(input, { key: 'Enter' });
+    });
+
+    expect(mockOnSendMessage).not.toHaveBeenCalled();
+  });
+
+  it('calls onRecordingComplete when recording is complete', async () => {
+    render(<PromptInputWithBottomActions {...defaultProps} />);
+    const voiceChatButton = screen.getByTestId('voice-chat-button');
+    await act(async () => {
+      fireEvent.click(voiceChatButton);
+    });
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+    await act(async () => {
+      fireEvent.click(voiceChatButton);
+    });
+
+    expect(mockOnVoiceMessage).toHaveBeenCalled();
+  });
+
+  it('show Attach File button when enableAttachFile is true', () => {
+    render(<PromptInputWithBottomActions {...defaultProps} enableAttachFile={true} />);
+    const attachFileButton = screen.getByText('Attach');
+    expect(attachFileButton).toBeInTheDocument();
   });
 });

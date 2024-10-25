@@ -20,7 +20,6 @@ export class AbstractAssistant {
   public static configure(props: {
     model: string;
     apiKey: string;
-    instructions: string;
   }) {
     throw new Error('Method not implemented.');
   }

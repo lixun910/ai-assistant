@@ -215,6 +215,6 @@ export type OpenAIConfigProps = {
   top_p?: number;
   name?: string;
   description?: string;
-  instructions: string;
+  instructions?: string;
   version?: string;
 };

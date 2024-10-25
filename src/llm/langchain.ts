@@ -44,7 +44,27 @@ export class LangChainAssistant extends AbstractAssistant {
     super();
   }
 
-  public static override async configure({
+  protected static checkModel() {
+    if (!LangChainAssistant.model || LangChainAssistant.model.trim() === '') {
+      throw new Error('LLM is not configured. Please call configure() first.');
+    }
+  }
+
+  protected static checkApiKey() {
+    if (!LangChainAssistant.apiKey || LangChainAssistant.apiKey.trim() === '') {
+      throw new Error('LLM is not configured. Please call configure() first.');
+    }
+  }
+
+  protected static isModelChanged(model?: string) {
+    return model && LangChainAssistant.model !== model;
+  }
+
+  protected static isApiKeyChanged(apiKey?: string) {
+    return apiKey && LangChainAssistant.apiKey !== apiKey;
+  }
+
+  public static override configure({
     apiKey,
     model,
     instructions,
@@ -73,11 +93,7 @@ export class LangChainAssistant extends AbstractAssistant {
     callbackFunctionContext,
     callbackMessage,
   }: RegisterFunctionCallingProps) {
-    // check if the function name is already registered
-    if (LangChainAssistant.customFunctions[name]) {
-      return;
-    }
-    // register custom function
+    // register custom function, if already registed then rewrite it
     LangChainAssistant.customFunctions[name] = {
       func: callbackFunction,
       context: callbackFunctionContext,
@@ -130,7 +146,7 @@ export class LangChainAssistant extends AbstractAssistant {
     streamMessageCallback,
     useTool = true,
   }: ProcessMessageProps) {
-    if (this.llm === null) {
+    if (!this.llm) {
       throw new Error('LLM instance is not initialized');
     }
     if (!this.abortController) {
@@ -243,7 +259,7 @@ export class LangChainAssistant extends AbstractAssistant {
     }
 
     streamMessageCallback({
-      deltaMessage: message.length === 0 ? '...' : message,
+      deltaMessage: message,
       customMessage,
       isCompleted: true,
     });
@@ -254,7 +270,7 @@ export class LangChainAssistant extends AbstractAssistant {
     textMessage,
     streamMessageCallback,
   }: ProcessImageMessageProps): Promise<void> {
-    if (this.llm === null) {
+    if (!this.llm) {
       throw new Error('LLM instance is not initialized');
     }
 

@@ -8,7 +8,7 @@ import { LangChainAssistant } from './langchain';
 import { ProcessMessageProps } from '../types';
 
 export class OllamaAssistant extends LangChainAssistant {
-  private aiModel: ChatOllama;
+  private aiModel: ChatOllama | null = null;
 
   private static baseUrl = 'http://127.0.0.1:11434';
 
@@ -35,7 +35,21 @@ export class OllamaAssistant extends LangChainAssistant {
     });
   }
 
+  protected static checkBaseUrl() {
+    if (!OllamaAssistant.baseUrl || OllamaAssistant.baseUrl.trim() === '') {
+      throw new Error('Base URL is not configured. Please call configure() first.');
+    }
+  }
+
+  protected static isBaseUrlChanged(baseUrl?: string) {
+    return baseUrl && OllamaAssistant.baseUrl !== baseUrl;
+  }
+
   public static async getInstance(): Promise<OllamaAssistant> {
+    // check if model and baseUrl are set
+    OllamaAssistant.checkBaseUrl();
+    LangChainAssistant.checkModel();
+
     if (OllamaAssistant.instance === null) {
       OllamaAssistant.instance = new OllamaAssistant();
       // NOTE: hack to avoid ollama always using tools
@@ -43,6 +57,22 @@ export class OllamaAssistant extends LangChainAssistant {
       //   'Analyse the given prompt and decided whether or not it can be answered by a tool. If it cannot, please use the model to answer the prompt directly and do not return any tool.';
       // OllamaAssistant.instance.messages.push(new HumanMessage(instructions));
       // OllamaAssistant.instance.messages.push(new AIMessage('Got it.'));
+    } else if (
+      LangChainAssistant.isModelChanged(
+        OllamaAssistant.instance.aiModel?.model
+      ) ||
+      OllamaAssistant.isBaseUrlChanged(
+        OllamaAssistant.instance.aiModel?.baseUrl
+      )
+    ) {
+      // reset the aiModel if the model is changed
+      OllamaAssistant.instance.aiModel = new ChatOllama({
+        model: OllamaAssistant.model,
+        baseUrl: OllamaAssistant.baseUrl,
+        temperature: OllamaAssistant.temperature,
+        topP: OllamaAssistant.topP,
+        streaming: true,
+      });
     }
 
     return OllamaAssistant.instance;
@@ -54,7 +84,7 @@ export class OllamaAssistant extends LangChainAssistant {
     OllamaAssistant.instance = null;
   }
 
-  public static override async configure({
+  public static override configure({
     baseUrl,
     model,
     instructions,
@@ -68,17 +98,17 @@ export class OllamaAssistant extends LangChainAssistant {
     topP?: number;
   }) {
     if (baseUrl) OllamaAssistant.baseUrl = baseUrl;
-    if (model) OllamaAssistant.model = model;
-    if (instructions) OllamaAssistant.instructions = instructions;
-    if (temperature) OllamaAssistant.temperature = temperature;
-    if (topP) OllamaAssistant.topP = topP;
+    if (model) LangChainAssistant.model = model;
+    if (instructions) LangChainAssistant.instructions = instructions;
+    if (temperature) LangChainAssistant.temperature = temperature;
+    if (topP) LangChainAssistant.topP = topP;
   }
 
   public override async processTextMessage({
     textMessage,
     streamMessageCallback,
   }: ProcessMessageProps) {
-    if (this.llm === null) {
+    if (!this.aiModel) {
       throw new Error('LLM instance is not initialized');
     }
 
@@ -99,7 +129,6 @@ export class OllamaAssistant extends LangChainAssistant {
         message += chunk.content.toString();
       }
     }
-    console.log('message', message);
     const useTool = message.startsWith('Yes') || message.startsWith('"Yes"');
 
     if (useTool === false) {
