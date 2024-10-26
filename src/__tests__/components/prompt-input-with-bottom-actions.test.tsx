@@ -152,21 +152,12 @@ describe('PromptInputWithBottomActions Component', () => {
       fireEvent.change(input, { target: { value: 'Test message' } });
     });
     await act(async () => {
-      fireEvent.keyDown(input, { shiftKey: true });
-    });
-    await act(async () => {
-      fireEvent.keyDown(input, { key: 'Enter' });
+      fireEvent.keyDown(input, { key: 'Enter', shiftKey: true });
     });
 
     expect(mockOnSendMessage).toHaveBeenCalledWith('Test message');
 
-    await act(async () => {
-      fireEvent.keyUp(input, { shiftKey: true});
-    });
-    await act(async () => {
-      fireEvent.keyUp(input, { key: 'Enter' });
-    });
-
+    // Test that regular Enter doesn't trigger onSendMessage
     mockOnSendMessage.mockClear();
     await act(async () => {
       fireEvent.keyDown(input, { key: 'Enter' });

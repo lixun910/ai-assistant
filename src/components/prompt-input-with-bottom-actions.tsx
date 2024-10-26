@@ -47,25 +47,13 @@ export default function Component({
     onRestartChat?.();
   };
 
-  const [isShiftPressed, setIsShiftPressed] = React.useState(false);
-
   const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.shiftKey) {
-      setIsShiftPressed(true);
-    } else {
-      if (event.key === 'Enter' && isShiftPressed) {
-        if (prompt.length > 0) {
-          onSendClick();
-        }
-        // prevent new line
-        event.preventDefault();
+    if (event.key === 'Enter' && event.shiftKey) {
+      if (prompt.length > 0) {
+        onSendClick();
       }
-    }
-  };
-
-  const onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.shiftKey) {
-      setIsShiftPressed(false);
+      // prevent new line
+      event.preventDefault();
     }
   };
 
@@ -189,7 +177,6 @@ export default function Component({
           variant="flat"
           onValueChange={setPrompt}
           onKeyDown={onKeyDown}
-          onKeyUp={onKeyUp}
           disabled={status === 'pending'}
         />
         <div className="flex w-full items-center justify-between  gap-2 overflow-scroll px-4 pb-4">

@@ -87,21 +87,20 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
 
       if (typeof message === 'string') {
         stringValue = message;
+      } else if (Array.isArray(message)) {
+        message.forEach((child) => {
+          const childString =
+            typeof child === 'string'
+              ? child
+              : child?.props?.children?.toString();
+
+          if (childString) {
+            stringValue += childString + '\n';
+          }
+        });
       }
-      // else if (Array.isArray(message)) {
-      //   message.forEach((child) => {
-      //     const childString =
-      //       typeof child === 'string'
-      //         ? child
-      //         : child?.props?.children?.toString();
 
-      //     if (childString) {
-      //       stringValue += childString + '\n';
-      //     }
-      //   });
-      // }
-
-      const valueToCopy = stringValue;
+      const valueToCopy = stringValue || messageRef.current?.textContent || '';
 
       copy(valueToCopy);
 
