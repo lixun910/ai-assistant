@@ -2,6 +2,10 @@
 
 AI-Assistant helps adding AI capabilities to your web and desktop applications.
 
+## License
+
+FlowmapBlue source code is free non-commercial usage. If you want to use it in a commercial project, please <a href="mailto:lixun910@gmail.com?subject=Ai-assistant">reach out to us</a>.
+
 ## Tutorial
 
 Let's say you have an application that allows users to order pizza. You can use AI-Assistant to add a conversational interface to your application.
@@ -43,21 +47,7 @@ const orderPizza = async (pizza, db) => {
 };
 ```
 
-To make these functions available to the AI-Assistant, you need to wrap them in a function object.
-
-```typescript
-
-```
-
 You can add an instruction to tell the AI-Assistant what the role the assistant should play in the application, so that the assistant can guide the user through the process of ordering a pizza not other things.
-
-For example, you can add the following instructions:
-
-```typescript
-const instructions = 'You are a pizza ordering assistant. You have two tasks:
-1. you can help user to customize pizza by selecting the size, crust, and toppings.
-2. You can help user to place an order by providing the pizza object.';
-```
 
 ```tsx
 <AiAssistant
@@ -200,7 +190,9 @@ The `callbackMessage` function takes an object with three properties: `functionN
 In this case, the `callbackMessage` function returns a React component that displays an image of the customized pizza and a text message with the pizza id and size.
 [screenshot of the conversation with image]
 
-Now, your pizza ordering assistant can help users customize their pizza and show them a picture of the customized pizza. However, in your original application, you also need to save the customized pizza to the database. How can you do that?
+Now, your pizza ordering assistant can help users customize their pizza and show them a picture of the customized pizza. 
+
+However, in your original application, you also need to save the customized pizza to the database. How can you do that?
 
 Let's assume you have an instance that connects to the database and it provides a method `savePizza` to save the pizza to the database. 
 
