@@ -1,11 +1,11 @@
 {
-  "name": "ai-assistant",
+  "name": "ai-assistant-react",
   "version": "0.0.1",
-  "private": false,
+  "private": true,
   "description": "AI assistant helps transform your react app into an AI-powered app.",
   "author": "Xun Li <lixun910@gmail.com>",
   "keywords": ["ai", "assistant", "chatbot", "openai", "chatgpt", "ollama"],
-  "license": "ISC",
+  "license": "MIT",
   "main": "dist/index.js",
   "files": [
     "dist",
