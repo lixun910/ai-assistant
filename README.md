@@ -4,7 +4,7 @@ AI-Assistant helps adding AI capabilities to your web and desktop applications.
 
 ## License
 
-This source code is free non-commercial usage. If you want to use it in a commercial project, please <a href="mailto:lixun910@gmail.com?subject=Ai-assistant">reach out to us</a>.
+MIT License.
 
 ## Tutorial
 
