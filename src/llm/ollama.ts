@@ -117,7 +117,7 @@ export class OllamaAssistant extends LangChainAssistant {
     const toolsString = JSON.stringify(tools);
 
     // check with ollama if the prompt can be answered by a tool
-    const checkMessage = `You have the following tools available\n: ${toolsString}\n. Can you answer the following prompt using one of the function in the given tools:\n"${textMessage}".\nPlease respond with one of the two words: "Yes" or "No".`;
+    const checkMessage = `You have the following tools available\n: ${toolsString}\n. Can you answer the following prompt using one of the function with the correct parameters in the given tools:\n"${textMessage}".\nPlease respond with one of the two words: "Yes" or "No".`;
 
     const stream = await this.aiModel.stream([new HumanMessage(checkMessage)]);
     const chunks: AIMessageChunk[] = [];

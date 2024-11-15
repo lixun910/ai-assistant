@@ -9,6 +9,8 @@ type PromptInputWithBottomActionsProps = {
   ideas?: {title: string; description: string}[];
   onSendMessage: (message: string) => void;
   onVoiceMessage: (voice: Blob) => Promise<string>;
+  enableVoice?: boolean;
+  enableScreenCapture?: boolean;
   onScreenshotClick?: () => void;
   onRemoveScreenshot?: () => void;
   enableAttachFile?: boolean;
@@ -23,6 +25,8 @@ export default function Component({
   ideas,
   onSendMessage,
   onVoiceMessage,
+  enableVoice,
+  enableScreenCapture,
   onScreenshotClick,
   onRemoveScreenshot,
   enableAttachFile,
@@ -181,22 +185,26 @@ export default function Component({
         />
         <div className="flex w-full items-center justify-between  gap-2 overflow-scroll px-4 pb-4">
           <div className="flex w-full gap-1 md:gap-3">
-            <Button
-              size="sm"
-              startContent={
-                <Icon
-                  className="text-default-500"
-                  icon="solar:gallery-minimalistic-linear"
-                  width={18}
-                />
-              }
-              variant="flat"
-              onClick={onScreenshotClick}
-              data-testid="screenshot-button"
-            >
-              Screenshot to Ask
-            </Button>
-            <VoiceChatButton onRecordingComplete={onRecordingComplete} />
+            {enableScreenCapture && (
+              <Button
+                size="sm"
+                startContent={
+                  <Icon
+                    className="text-default-500"
+                    icon="solar:gallery-minimalistic-linear"
+                    width={18}
+                  />
+                }
+                variant="flat"
+                onClick={onScreenshotClick}
+                data-testid="screenshot-button"
+              >
+                Screenshot to Ask
+              </Button>
+            )}
+            {enableVoice && (
+              <VoiceChatButton onRecordingComplete={onRecordingComplete} />
+            )}
             {enableAttachFile && (
               <>
                 <Button

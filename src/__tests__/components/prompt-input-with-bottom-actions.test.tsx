@@ -39,6 +39,8 @@ describe('PromptInputWithBottomActions Component', () => {
     onStopChat: mockOnStopChat,
     onRestartChat: mockOnRestartChat,
     ideas: [{ title: 'Idea 1', description: 'Description 1' }],
+    enableScreenCapture: true,
+    enableVoice: true,
     enableAttachFile: false,
     screenCaptured: '',
     defaultPromptText: '',

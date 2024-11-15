@@ -399,8 +399,6 @@ describe('prompts', () => {
     expect(mockRunsCreateAndPoll).toHaveBeenCalledWith('test-thread-id', {
       assistant_id: 'test-assistant-id',
     });
-    expect(mockMessageList).toHaveBeenCalledTimes(1);
-    expect(mockMessageList).toHaveBeenCalledWith('test-thread-id');
     expect(mockCallback).toHaveBeenCalledTimes(1);
   });
 

@@ -344,15 +344,15 @@ export class GPTAssistant extends AbstractAssistant {
       );
 
       if (run.status === 'completed') {
-        const messages = await this.openai.beta.threads.messages.list(
-          run.thread_id
-        );
-        for (const message of messages.data.reverse()) {
-          console.log(`${message.role} > ${message.content[0]}`);
-        }
+        // const messages = await this.openai.beta.threads.messages.list(
+        //   run.thread_id
+        // );
+        // for (const message of messages.data.reverse()) {
+        //   console.log(`${message.role} > ${message.content[0]}`);
+        // }
         if (callback) callback();
       } else {
-        console.log(run.status);
+        // console.log(run.status);
         // cancel run if it's not completed
         await this.openai.beta.threads.runs.cancel(run.thread_id, run.id);
       }

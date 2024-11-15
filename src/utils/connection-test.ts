@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-interface ConnectionTestResult {
+type ConnectionTestResult = {
   service: string;
   success: boolean;
   message: string;
-}
+};
 
 export async function testApiKey({
   apiKey,
@@ -16,29 +16,38 @@ export async function testApiKey({
   modelProvider: string;
   modelName: string;
   baseUrl: string;
-}): Promise<boolean> {
-  if (modelProvider.toLowerCase() === 'openai') {
+}): Promise<ConnectionTestResult> {
+  const modelProviderLowerCase = modelProvider.toLowerCase();
+  if (modelProviderLowerCase === 'openai') {
     return testOpenAIChatGPTConnection(apiKey, modelName);
-  } else if (modelProvider.toLowerCase() === 'google') {
+  } else if (modelProviderLowerCase === 'google') {
     return testGeminiConnection(apiKey, modelName);
-  } else if (modelProvider.toLowerCase() === 'ollama') {
+  } else if (modelProviderLowerCase === 'ollama') {
     return testOllamConnection(modelName, baseUrl);
-  } else if (modelProvider.toLowerCase() === 'anthropic') {
+  } else if (modelProviderLowerCase === 'anthropic') {
     return testAnthropicConnection(modelName, modelName);
-  } else if (modelProvider.toLowerCase() === 'phoenixai') {
+  } else if (modelProviderLowerCase === 'phoenixai') {
     // TODO: implement PhoenixAI connection test
-    return false;
+    return {
+      service: 'PhoenixAI',
+      success: false,
+      message: 'PhoenixAI connection test not implemented',
+    };
   } else {
-    return false;
+    return {
+      service: 'Unknown',
+      success: false,
+      message: 'Unknown model provider',
+    };
   }
 }
 
 export async function testAnthropicConnection(
   apiKey: string,
   modelName: string
-): Promise<boolean> {
+): Promise<ConnectionTestResult> {
   const result: ConnectionTestResult = {
-    service: 'Anthropic',
+    service: 'anthropic',
     success: false,
     message: '',
   };
@@ -64,15 +73,15 @@ export async function testAnthropicConnection(
     result.message = `${error}`;
   }
 
-  return result.success;
+  return result;
 }
 
 export async function testOpenAIChatGPTConnection(
   apiKey: string,
   modelName: string
-): Promise<boolean> {
+): Promise<ConnectionTestResult> {
   const result: ConnectionTestResult = {
-    service: 'OpenAI',
+    service: 'openai',
     success: false,
     message: '',
   };
@@ -108,15 +117,15 @@ export async function testOpenAIChatGPTConnection(
     result.message = `${error}`;
   }
 
-  return result.success;
+  return result;
 }
 
 export async function testGeminiConnection(
   apiKey: string,
   modelName: string
-): Promise<boolean> {
+): Promise<ConnectionTestResult> {
   const result: ConnectionTestResult = {
-    service: 'Gemini',
+    service: 'google',
     success: false,
     message: '',
   };
@@ -131,8 +140,8 @@ export async function testGeminiConnection(
             parts: [
               {
                 text: 'Hello',
-              }
-            ]
+              },
+            ],
           },
         ],
       },
@@ -149,15 +158,15 @@ export async function testGeminiConnection(
     result.message = `${error}`;
   }
 
-  return result.success;
+  return result;
 }
 
 export async function testOllamConnection(
   modelName: string,
   baseUrl: string
-): Promise<boolean> {
+): Promise<ConnectionTestResult> {
   const results: ConnectionTestResult = {
-    service: 'Ollma',
+    service: 'ollama',
     success: false,
     message: '',
   };
@@ -175,5 +184,5 @@ export async function testOllamConnection(
     results.message = `${error}`;
   }
 
-  return results.success;
+  return results;
 }

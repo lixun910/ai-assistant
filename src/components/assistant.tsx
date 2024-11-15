@@ -18,6 +18,8 @@ export type AiAssistantProps = UseAssistantProps & {
   userAvatar?: ReactNode | string;
   assistantAvatar?: ReactNode | string;
   isMessageDraggable?: boolean;
+  enableVoice?: boolean;
+  enableScreenCapture?: boolean;
   screenCapturedBase64?: string;
   screenCapturedPrompt?: string;
   onScreenshotClick?: () => void;
@@ -211,6 +213,8 @@ export function AiAssistant(props: AiAssistantProps) {
             ideas={props.ideas}
             onSendMessage={onSendMessage}
             onVoiceMessage={onVoiceMessage}
+            enableVoice={props.enableVoice}
+            enableScreenCapture={props.enableScreenCapture}
             onScreenshotClick={props.onScreenshotClick}
             onRemoveScreenshot={props.onRemoveScreenshot}
             screenCaptured={props.screenCapturedBase64}

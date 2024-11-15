@@ -1,9 +1,17 @@
 {
   "name": "ai-assistant",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.1",
+  "private": false,
+  "description": "AI assistant helps transform your react app into an AI-powered app.",
+  "author": "Xun Li <lixun910@gmail.com>",
+  "keywords": ["ai", "assistant", "chatbot", "openai", "chatgpt", "ollama"],
+  "license": "ISC",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest --coverage",
     "vite-dev": "vite",
@@ -11,14 +19,12 @@
     "vite-preview": "vite preview",
     "declaration": "tsc --emitDeclarationOnly --outDir dist",
     "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.js --sourcemap",
+    "esbuild": "node esbuild.config.js",
     "quick-test": "npx ts-node ./tests/quick-test.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "lint": "eslint ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
     "@emotion/is-prop-valid": "^1.3.1",
@@ -40,6 +46,7 @@
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
     "esbuild": "^0.23.1",
+    "esbuild-plugin-tailwindcss": "^1.2.1",
     "eslint": "^9.12.0",
     "eslint-plugin-react": "^7.37.1",
     "framer-motion": "^11.11.10",

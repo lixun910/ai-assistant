@@ -1,0 +1,30 @@
+# Source files
+src/
+tests/
+stories/
+
+# Config files
+.storybook/
+.github/
+.vscode/
+esbuild.config.js
+jest.config.js
+tsconfig.json
+tailwind.config.js
+postcss.config.js
+.eslintrc.js
+.prettierrc
+
+# Build artifacts
+coverage/
+storybook-static/
+
+# Development files
+*.test.ts
+*.test.tsx
+*.stories.tsx
+
+# Misc
+.DS_Store
+*.log
+.env* 

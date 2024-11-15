@@ -154,6 +154,7 @@ describe('AiAssistant', () => {
         onScreenshotClick={onScreenshotClick}
         screenCapturedBase64="data:image/png;test"
         welcomeMessage="Welcome"
+        enableScreenCapture={true}
       />
     );
 
@@ -188,7 +189,13 @@ describe('AiAssistant', () => {
   });
 
   it('sends a voice message', async () => {
-    render(<AiAssistant {...mockProps} welcomeMessage="Welcome" />);
+    render(
+      <AiAssistant
+        {...mockProps}
+        welcomeMessage="Welcome"
+        enableVoice={true}
+      />
+    );
 
     // find the voice chat button
     const voiceChatButton = screen.getByTestId('voice-chat-button');

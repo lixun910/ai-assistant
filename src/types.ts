@@ -65,6 +65,8 @@ export type CustomFunctionContextCallback<C> = () => CustomFunctionContext<C>;
 /**
  * Type of Custom function output props
  * 
+ * @template R The type of the result send back to LLM
+ * @template D The type of the data used by custom message callback
  * @param type The type of the function, e.g. 'custom' used for type guarding
  * @param name The name of the function, e.g. createMap, createPlot etc.
  * @param args The args of the function, e.g. {datasetId: '123', variable: 'income'}
