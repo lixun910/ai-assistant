@@ -7,9 +7,8 @@ const watch = false;
 esbuild.build({
   entryPoints: ['src/index.ts', 'src/index.css'],
   bundle: true,
-  platform: 'node',
-  format: 'cjs',
-  // outfile: 'dist/index.js',
+  platform: 'browser',
+  format: 'esm',
   sourcemap: true,
   loader: { '.css': 'css' },
   outdir: 'dist',
@@ -21,8 +20,12 @@ esbuild.build({
       config: './tailwind.config.js',
     }),
   ],
+  external: [
+    'react',
+    'react-dom',
+  ],
 }).then(() => {
   if (watch) {
-    // ... watch code ...
+    console.log('Watching for changes...');
   }
 });

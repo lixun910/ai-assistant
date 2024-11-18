@@ -51,15 +51,15 @@ exports[`MessageCard Component renders the message correctly 1`] = `
       class="flex w-full flex-col gap-4"
     >
       <div
-        class="group relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600"
+        class="group relative w-full rounded-medium px-4 py-3 text-default-600"
       >
         <div
-          class="min-h-8 whitespace-pre-line text-small"
+          class="min-h-8 whitespace-pre-line"
         >
           Test message
         </div>
         <div
-          class="opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full bg-content2 shadow-small"
+          class="opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full shadow-small"
         >
           <div
             class=""

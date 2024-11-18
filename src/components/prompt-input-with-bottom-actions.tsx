@@ -19,6 +19,7 @@ type PromptInputWithBottomActionsProps = {
   status?: 'success' | 'failed' | 'pending';
   onStopChat?: () => void;
   onRestartChat?: () => void;
+  fontSize?: string;
 };
 
 export default function Component({
@@ -35,6 +36,7 @@ export default function Component({
   status,
   onStopChat,
   onRestartChat,
+  fontSize,
 }: PromptInputWithBottomActionsProps) {
   const [prompt, setPrompt] = useState<string>('');
 
@@ -139,7 +141,7 @@ export default function Component({
           classNames={{
             inputWrapper: '!bg-transparent shadow-none',
             innerWrapper: 'relative',
-            input: 'pt-1 pl-2 pb-6 !pr-10 text-medium',
+            input: `pt-1 pl-2 pb-6 !pr-10 ${fontSize ?? 'text-small'}`,
           }}
           endContent={
             <div className="flex items-end gap-2">
@@ -232,7 +234,7 @@ export default function Component({
                 data-testid="restart-button"
               >
                 <Icon
-                  className="text-lg text-default-600"
+                  className="text-default-600"
                   icon="lucide:list-restart"
                 />
               </Button>

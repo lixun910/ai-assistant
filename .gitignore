@@ -9,3 +9,4 @@ src/stories
 .env.local
 .env
 coverage
+*.tgz

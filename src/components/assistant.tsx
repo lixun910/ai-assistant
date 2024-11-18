@@ -26,6 +26,10 @@ export type AiAssistantProps = UseAssistantProps & {
   onRemoveScreenshot?: () => void;
   onFeedback?: (question: string) => void;
   onMessagesUpdated?: (messages: MessageModel[]) => void;
+  fontSize?: string;
+  botMessageClassName?: string;
+  userMessageClassName?: string;
+  githubIssueLink?: string;
 };
 
 const createWelcomeMessage = (welcomeMessage: string): MessageModel => ({
@@ -169,7 +173,11 @@ export function AiAssistant(props: AiAssistantProps) {
 
   return (
     <ChatContainer theme={props.theme || 'light'}>
-      <div className="order-1 m-2 flex h-full flex-grow flex-col overflow-y-auto overflow-x-hidden">
+      <div
+        className={`order-1 m-2 flex h-full flex-grow flex-col overflow-y-auto overflow-x-hidden ${
+          props.fontSize ?? 'text-small'
+        }`}
+      >
         <div
           className="relative flex h-full flex-col gap-4 overflow-y-auto overflow-x-hidden px-1"
           id="chat-message-list"
@@ -188,8 +196,8 @@ export function AiAssistant(props: AiAssistantProps) {
                   customMessage={message.payload}
                   messageClassName={
                     message.direction == 'outgoing'
-                      ? 'bg-content3 text-content3-foreground'
-                      : ''
+                      ? props.userMessageClassName ?? 'bg-content3 text-content3-foreground'
+                      : props.botMessageClassName ?? 'bg-content2'
                   }
                   showFeedback={message.direction === 'incoming'}
                   status={
@@ -203,6 +211,7 @@ export function AiAssistant(props: AiAssistantProps) {
                   draggable={props.isMessageDraggable || false}
                   unselectable="on"
                   onDragStart={(e) => onMessageDragStart(e, i, messageElement)}
+                  githubIssueLink={props.githubIssueLink}
                 />
               );
             })}
@@ -222,8 +231,11 @@ export function AiAssistant(props: AiAssistantProps) {
             status={isPrompting ? 'pending' : 'success'}
             onStopChat={onStopChat}
             onRestartChat={onRestartChat}
+            fontSize={props.fontSize}
           />
-          <p className="px-2 text-tiny text-default-400">
+          <p
+            className={`px-2 ${props.fontSize ?? 'text-tiny'} text-default-400`}
+          >
             AI can make mistakes. Consider checking information.
           </p>
         </div>

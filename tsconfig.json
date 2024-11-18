@@ -3,22 +3,31 @@
     "jsx": "react-jsx",
     "target": "es2020",
     "lib": ["dom", "es2020"],
-    "module": "es2020",
+    "module": "esnext",
     "moduleResolution": "node",
-    "allowJs": true,
-    "noEmit": true,
+    "allowJs": false,
+    "checkJs": false,
+    "noEmit": false,
     "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true,
     "outDir": "./dist",
     "sourceMap": true,
     "esModuleInterop": true,
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "exclude": [
     "node_modules",
-    "./node_modules",
-    "./node_modules/*",
-    "**/__tests__/*"
+    "src/**/__mocks__/**",
+    "src/**/__tests__/**",
+    "src/**/*.stories.*",
+    "src/**/wip/**",
+    "src/**/jest/**",
+    "dist"
   ]
 }

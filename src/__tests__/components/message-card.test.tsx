@@ -37,10 +37,7 @@ describe('MessageCard Component', () => {
     expect(
       screen.getByText(/Sorry, something went wrong/i)
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Github/i })).toHaveAttribute(
-      'href',
-      'https://github.com'
-    );
+    expect(screen.getByRole('link', { name: /Github/i })).toBeInTheDocument();
   });
 
   it('shows loading spinner when status is pending', () => {

@@ -30,10 +30,12 @@ export type MessageCardProps = HTMLAttributes<HTMLDivElement> & {
   status?: 'success' | 'failed' | 'pending';
   attempts?: number;
   messageClassName?: string;
+  botMessageBackground?: string;
   onAttemptChange?: (attempt: number) => void;
   onMessageCopy?: (content: string | string[]) => void;
   onFeedback?: (index: number) => void;
   onAttemptFeedback?: (feedback: 'like' | 'dislike' | 'same') => void;
+  githubIssueLink?: string;
 };
 
 const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
@@ -53,6 +55,8 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
       onAttemptFeedback,
       className,
       messageClassName,
+      botMessageBackground,
+      githubIssueLink,
       ...props
     },
     ref
@@ -73,8 +77,8 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
     const failedMessage = (
       <p className="mb-2" data-testid="failed-message">
         Sorry, something went wrong. If the issue persists please contact us
-        through our help center at&nbsp;
-        <Link target="_blank" href="https://github.com" size="sm">
+        through &nbsp;
+        <Link target="_blank" href={githubIssueLink} size="sm">
           Github
         </Link>
       </p>
@@ -152,15 +156,12 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
         <div className="flex w-full flex-col gap-4">
           <div
             className={cn(
-              'group relative w-full rounded-medium bg-content2 px-4 py-3 text-default-600 ',
+              'group relative w-full rounded-medium px-4 py-3 text-default-600 ',
               failedMessageClassName,
               messageClassName
             )}
           >
-            <div
-              ref={messageRef}
-              className={'min-h-8 whitespace-pre-line text-small'}
-            >
+            <div ref={messageRef} className={'min-h-8 whitespace-pre-line'}>
               {/* show screenshot image */}
               {customMessage &&
                 typeof customMessage === 'string' &&
@@ -190,7 +191,9 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
                 />
               )}
             </div>
-            <div className="opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full bg-content2 shadow-small">
+            <div
+              className={`opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full shadow-small`}
+            >
               {showFeedback && !hasFailed && status !== 'pending' && (
                 <div className="">
                   <Tooltip content="Copy Text">
@@ -204,12 +207,12 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
                     >
                       {copied ? (
                         <Icon
-                          className="text-lg text-default-600"
+                          className="text-default-600"
                           icon="gravity-ui:check"
                         />
                       ) : (
                         <Icon
-                          className="text-lg text-default-600"
+                          className="text-default-600"
                           icon="gravity-ui:copy"
                         />
                       )}
@@ -226,12 +229,12 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
                     >
                       {feedback === 'dislike' ? (
                         <Icon
-                          className="text-lg text-default-600"
+                          className="text-default-600"
                           icon="gravity-ui:thumbs-down-fill"
                         />
                       ) : (
                         <Icon
-                          className="text-lg text-default-600"
+                          className="text-default-600"
                           icon="gravity-ui:thumbs-down"
                         />
                       )}
@@ -276,7 +279,7 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
           </div>
           {showFeedback && attempts > 1 && (
             <div className="flex items-center justify-between rounded-medium border-small border-default-100 px-4 py-3 shadow-small">
-              <p className="text-small text-default-600">
+              <p className="text-tiny text-default-600">
                 Was this response better or worse?
               </p>
               <div className="flex gap-1">
@@ -291,12 +294,12 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
                   >
                     {attemptFeedback === 'like' ? (
                       <Icon
-                        className="text-lg text-primary"
+                        className="text-primary"
                         icon="gravity-ui:thumbs-up-fill"
                       />
                     ) : (
                       <Icon
-                        className="text-lg text-default-600"
+                        className="text-default-600"
                         icon="gravity-ui:thumbs-up"
                       />
                     )}
@@ -312,12 +315,12 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
                   >
                     {attemptFeedback === 'dislike' ? (
                       <Icon
-                        className="text-lg text-default-600"
+                        className="text-default-600"
                         icon="gravity-ui:thumbs-down-fill"
                       />
                     ) : (
                       <Icon
-                        className="text-lg text-default-600"
+                        className="text-default-600"
                         icon="gravity-ui:thumbs-down"
                       />
                     )}
@@ -333,12 +336,12 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
                   >
                     {attemptFeedback === 'same' ? (
                       <Icon
-                        className="text-lg text-danger"
+                        className="text-danger"
                         icon="gravity-ui:face-sad"
                       />
                     ) : (
                       <Icon
-                        className="text-lg text-default-600"
+                        className="text-default-600"
                         icon="gravity-ui:face-sad"
                       />
                     )}

@@ -1,3 +1,5 @@
+import React from 'react';
+import { useState } from 'react';
 import { OllamaAssistant } from '../llm/ollama';
 import { GPTAssistant } from '../llm/chatgpt';
 import {
@@ -7,7 +9,6 @@ import {
   StreamMessageCallback,
 } from '../types';
 import { GoogleAssistant } from '../llm/google';
-import { useState } from 'react';
 
 /**
  * Props for the useAssistant hook.
@@ -55,7 +56,7 @@ let assistant: OllamaAssistant | GoogleAssistant | GPTAssistant | null = null;
  * @param {UseAssistantProps} props - Configuration options for the assistant.
  * @returns {Object} An object containing methods to interact with the assistant and its current status.
  */
-export const useAssistant = ({
+export function useAssistant({
   modelProvider,
   model,
   apiKey,
@@ -63,7 +64,7 @@ export const useAssistant = ({
   topP,
   instructions,
   functions,
-}: UseAssistantProps) => {
+}: UseAssistantProps) {
   const [apiKeyStatus, setApiKeyStatus] = useState<string>('failed');
 
   /**
@@ -205,7 +206,7 @@ export const useAssistant = ({
     restartChat,
     apiKeyStatus,
   };
-};
+}
 
 /**
  * Returns the appropriate Assistant model based on the provider.

@@ -327,6 +327,6 @@ describe('AiAssistant', () => {
 
     // the html content should have bg-danger-100/50 in the class
     const failedMessage = screen.getAllByTestId('message-card')[2];
-    expect(failedMessage.innerHTML).toContain('bg-danger-100/50');
+    expect(failedMessage.innerHTML).toContain('Sorry, something went wrong.');
   });
 });

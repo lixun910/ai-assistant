@@ -57,7 +57,7 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
               >
                 <textarea
                   aria-label="Prompt"
-                  class="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text resize-none data-[hide-scroll=true]:scrollbar-hide group-data-[has-value=true]:text-default-foreground transition-height !duration-100 motion-reduce:transition-none py-0 pt-1 pl-2 pb-6 !pr-10 text-medium"
+                  class="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text resize-none data-[hide-scroll=true]:scrollbar-hide group-data-[has-value=true]:text-default-foreground transition-height !duration-100 motion-reduce:transition-none py-0 pt-1 pl-2 pb-6 !pr-10 text-small"
                   data-has-end-content="true"
                   data-hide-scroll="true"
                   data-slot="input"
@@ -129,7 +129,7 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
                 type="button"
               >
                 <svg
-                  class="text-lg text-default-600"
+                  class="text-default-600"
                   data-testid="icon"
                   icon="lucide:list-restart"
                 />
@@ -199,7 +199,7 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
             >
               <textarea
                 aria-label="Prompt"
-                class="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text resize-none data-[hide-scroll=true]:scrollbar-hide group-data-[has-value=true]:text-default-foreground transition-height !duration-100 motion-reduce:transition-none py-0 pt-1 pl-2 pb-6 !pr-10 text-medium"
+                class="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 file:cursor-pointer file:bg-transparent file:border-0 autofill:bg-transparent bg-clip-text resize-none data-[hide-scroll=true]:scrollbar-hide group-data-[has-value=true]:text-default-foreground transition-height !duration-100 motion-reduce:transition-none py-0 pt-1 pl-2 pb-6 !pr-10 text-small"
                 data-has-end-content="true"
                 data-hide-scroll="true"
                 data-slot="input"
@@ -271,7 +271,7 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
               type="button"
             >
               <svg
-                class="text-lg text-default-600"
+                class="text-default-600"
                 data-testid="icon"
                 icon="lucide:list-restart"
               />
