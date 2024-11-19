@@ -70,18 +70,22 @@ export class LangChainAssistant extends AbstractAssistant {
     instructions,
     temperature,
     topP,
+    description,
   }: {
     apiKey?: string;
     model?: string;
     instructions?: string;
     temperature?: number;
     topP?: number;
+    description?: string;
+    version?: string;
   }) {
     if (apiKey) LangChainAssistant.apiKey = apiKey;
     if (model) LangChainAssistant.model = model;
     if (instructions) LangChainAssistant.instructions = instructions;
     if (temperature) LangChainAssistant.temperature = temperature;
     if (topP) LangChainAssistant.topP = topP;
+    if (description) LangChainAssistant.description = description;
   }
 
   public static override registerFunctionCalling({

@@ -55,7 +55,6 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
       onAttemptFeedback,
       className,
       messageClassName,
-      botMessageBackground,
       githubIssueLink,
       ...props
     },
@@ -192,7 +191,7 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
               )}
             </div>
             <div
-              className={`opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full shadow-small`}
+              className={`opacity-0 group-hover:opacity-100 absolute right-2 top-2 flex rounded-full shadow-small bg-content2`}
             >
               {showFeedback && !hasFailed && status !== 'pending' && (
                 <div className="">

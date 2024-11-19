@@ -90,18 +90,23 @@ export class OllamaAssistant extends LangChainAssistant {
     instructions,
     temperature,
     topP,
+    description
   }: {
     baseUrl?: string;
     model?: string;
     instructions?: string;
     temperature?: number;
     topP?: number;
+    name?: string;
+    description?: string;
+    version?: string;
   }) {
     if (baseUrl) OllamaAssistant.baseUrl = baseUrl;
     if (model) LangChainAssistant.model = model;
     if (instructions) LangChainAssistant.instructions = instructions;
     if (temperature) LangChainAssistant.temperature = temperature;
     if (topP) LangChainAssistant.topP = topP;
+    if (description) LangChainAssistant.description = description;
   }
 
   public override async processTextMessage({

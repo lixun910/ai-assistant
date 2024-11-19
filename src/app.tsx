@@ -18,6 +18,9 @@ export function App() {
         >
           <div className="h-[600px] w-[400px] m-4">
             <AiAssistant
+              name="my-assistant"
+              description="This is my assistant"
+              version="0.0.1"
               theme="dark"
               modelProvider="google"
               model="gemini-1.5-flash"

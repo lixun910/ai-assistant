@@ -4,12 +4,9 @@ export { OllamaAssistant } from './llm/ollama';
 
 export { GoogleAssistant } from './llm/google';
 
-export { OpenAIAssistant } from './llm/openai';
-
-export { AnthropicAssistant } from './llm/wip/anthropic';
-
 export { AiAssistant } from './components/assistant';
 
+export { ScreenshotWrapper } from './components/screenshot-wrapper';
 export * from './types';
 
 export { useAssistant } from './hooks/use-assistant';

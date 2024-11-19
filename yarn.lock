@@ -7230,6 +7230,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^8.0.0":
+  version: 8.3.0
+  resolution: "commander@npm:8.3.0"
+  checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
+  languageName: node
+  linkType: hard
+
 "compute-scroll-into-view@npm:^3.0.2":
   version: 3.1.0
   resolution: "compute-scroll-into-view@npm:3.1.0"
@@ -7503,6 +7510,15 @@ __metadata:
   version: 2.0.3
   resolution: "dequal@npm:2.0.3"
   checksum: 8679b850e1a3d0ebbc46ee780d5df7b478c23f335887464023a631d1b9af051ad4a6595a44220f9ff8ff95a8ddccf019b5ad778a976fd7bbf77383d36f412f90
+  languageName: node
+  linkType: hard
+
+"detect-libc@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "detect-libc@npm:1.0.3"
+  bin:
+    detect-libc: ./bin/detect-libc.js
+  checksum: daaaed925ffa7889bd91d56e9624e6c8033911bb60f3a50a74a87500680652969dbaab9526d1e200a4c94acf80fc862a22131841145a0a8482d60a99c24f4a3e
   languageName: node
   linkType: hard
 
@@ -7807,6 +7823,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"esbuild-css-modules-plugin@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "esbuild-css-modules-plugin@npm:3.1.2"
+  dependencies:
+    lightningcss: ^1.24.1
+    lodash-es: ^4.17.21
+  peerDependencies:
+    esbuild: "*"
+  checksum: 0606462ca21c3022876b54a5ede5608b50c488e17d74ccd795506cf78fad34897220a62c5d14d1e5563accdbf0e3afe219e64a6db4058404404227fe018ac1c2
+  languageName: node
+  linkType: hard
+
+"esbuild-plugin-purgecss@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "esbuild-plugin-purgecss@npm:0.0.6"
+  dependencies:
+    purgecss: ^4.0.3
+  checksum: 83b80ce65b328ad95d58a2d3878a790e6e7d50871098128e8694e9bc9e2ed18415afad55106bc2df4a649a2a856eaa1426949ba87033fbe8d7d647610ce51967
+  languageName: node
+  linkType: hard
+
 "esbuild-plugin-tailwindcss@npm:^1.2.1":
   version: 1.2.1
   resolution: "esbuild-plugin-tailwindcss@npm:1.2.1"
@@ -7827,6 +7864,19 @@ __metadata:
   peerDependencies:
     esbuild: ">=0.12 <1"
   checksum: 9221e26dde3366398a43183b600d8e9252b8003516cd766983a06c321eb07cf1b6b236948a21e4d1728c17a341c0fa52b49409c951d89fc7bf65d07d43c31a05
+  languageName: node
+  linkType: hard
+
+"esbuild-visualizer@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "esbuild-visualizer@npm:0.6.0"
+  dependencies:
+    open: ^8.4.0
+    picomatch: ^2.3.1
+    yargs: ^17.6.2
+  bin:
+    esbuild-visualizer: dist/bin/cli.js
+  checksum: 62eb06118b206ac8def94cb8e287b66567fd43c8ae0750d45bbe9ffdd5aaeab3901fe7a81a384ca21f379df05f3b7dd174adc47d2d8bd78c7a1515416d56a7ac
   languageName: node
   linkType: hard
 
@@ -8760,7 +8810,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.2.0":
+"glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.7, glob@npm:^7.2.0":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
@@ -10458,6 +10508,116 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lightningcss-darwin-arm64@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-darwin-arm64@npm:1.28.1"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lightningcss-darwin-x64@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-darwin-x64@npm:1.28.1"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lightningcss-freebsd-x64@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-freebsd-x64@npm:1.28.1"
+  conditions: os=freebsd & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lightningcss-linux-arm-gnueabihf@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-linux-arm-gnueabihf@npm:1.28.1"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"lightningcss-linux-arm64-gnu@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-linux-arm64-gnu@npm:1.28.1"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"lightningcss-linux-arm64-musl@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-linux-arm64-musl@npm:1.28.1"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"lightningcss-linux-x64-gnu@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-linux-x64-gnu@npm:1.28.1"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"lightningcss-linux-x64-musl@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-linux-x64-musl@npm:1.28.1"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"lightningcss-win32-arm64-msvc@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-win32-arm64-msvc@npm:1.28.1"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"lightningcss-win32-x64-msvc@npm:1.28.1":
+  version: 1.28.1
+  resolution: "lightningcss-win32-x64-msvc@npm:1.28.1"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"lightningcss@npm:^1.24.1":
+  version: 1.28.1
+  resolution: "lightningcss@npm:1.28.1"
+  dependencies:
+    detect-libc: ^1.0.3
+    lightningcss-darwin-arm64: 1.28.1
+    lightningcss-darwin-x64: 1.28.1
+    lightningcss-freebsd-x64: 1.28.1
+    lightningcss-linux-arm-gnueabihf: 1.28.1
+    lightningcss-linux-arm64-gnu: 1.28.1
+    lightningcss-linux-arm64-musl: 1.28.1
+    lightningcss-linux-x64-gnu: 1.28.1
+    lightningcss-linux-x64-musl: 1.28.1
+    lightningcss-win32-arm64-msvc: 1.28.1
+    lightningcss-win32-x64-msvc: 1.28.1
+  dependenciesMeta:
+    lightningcss-darwin-arm64:
+      optional: true
+    lightningcss-darwin-x64:
+      optional: true
+    lightningcss-freebsd-x64:
+      optional: true
+    lightningcss-linux-arm-gnueabihf:
+      optional: true
+    lightningcss-linux-arm64-gnu:
+      optional: true
+    lightningcss-linux-arm64-musl:
+      optional: true
+    lightningcss-linux-x64-gnu:
+      optional: true
+    lightningcss-linux-x64-musl:
+      optional: true
+    lightningcss-win32-arm64-msvc:
+      optional: true
+    lightningcss-win32-x64-msvc:
+      optional: true
+  checksum: 6ac8302021b2a917c16991310ff8c588c9163cad1c0abe271a44c2b58c05de03fcbde64d49f53dbe449402def02e4a4e11754da23bcb2a99d86bfbc93424333c
+  languageName: node
+  linkType: hard
+
 "lilconfig@npm:^2.1.0":
   version: 2.1.0
   resolution: "lilconfig@npm:2.1.0"
@@ -10501,6 +10661,13 @@ __metadata:
   dependencies:
     p-locate: ^5.0.0
   checksum: 72eb661788a0368c099a184c59d2fee760b3831c9c1c33955e8a19ae4a21b4116e53fa736dc086cdeb9fce9f7cc508f2f92d2d3aae516f133e16a2bb59a39f5a
+  languageName: node
+  linkType: hard
+
+"lodash-es@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash-es@npm:4.17.21"
+  checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
   languageName: node
   linkType: hard
 
@@ -11134,7 +11301,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"open@npm:^8.0.4":
+"open@npm:^8.0.4, open@npm:^8.4.0":
   version: 8.4.2
   resolution: "open@npm:8.4.2"
   dependencies:
@@ -11533,7 +11700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^6.1.1, postcss-selector-parser@npm:^6.1.2":
+"postcss-selector-parser@npm:^6.0.6, postcss-selector-parser@npm:^6.1.1, postcss-selector-parser@npm:^6.1.2":
   version: 6.1.2
   resolution: "postcss-selector-parser@npm:6.1.2"
   dependencies:
@@ -11560,7 +11727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.21, postcss@npm:^8.4.43, postcss@npm:^8.4.45, postcss@npm:^8.4.47":
+"postcss@npm:^8.3.5, postcss@npm:^8.4.21, postcss@npm:^8.4.43, postcss@npm:^8.4.45, postcss@npm:^8.4.47":
   version: 8.4.49
   resolution: "postcss@npm:8.4.49"
   dependencies:
@@ -11675,6 +11842,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"purgecss@npm:^4.0.3":
+  version: 4.1.3
+  resolution: "purgecss@npm:4.1.3"
+  dependencies:
+    commander: ^8.0.0
+    glob: ^7.1.7
+    postcss: ^8.3.5
+    postcss-selector-parser: ^6.0.6
+  bin:
+    purgecss: bin/purgecss.js
+  checksum: 508613f904b130401f2a403d3383533f703c6bcd56e1254c1e8f57818a5337db3a667f66f48355f86271b20dd576691357752f460eb2edd94c095e4178391c5f
+  languageName: node
+  linkType: hard
+
 "querystringify@npm:^2.1.1":
   version: 2.2.0
   resolution: "querystringify@npm:2.2.0"
@@ -11723,7 +11904,10 @@ __metadata:
     autoprefixer: ^10.4.20
     axios: ^1.7.7
     esbuild: ^0.23.1
+    esbuild-css-modules-plugin: ^3.1.2
+    esbuild-plugin-purgecss: ^0.0.6
     esbuild-plugin-tailwindcss: ^1.2.1
+    esbuild-visualizer: ^0.6.0
     eslint: ^9.12.0
     eslint-plugin-react: ^7.37.1
     framer-motion: ^11.11.10
@@ -11749,8 +11933,8 @@ __metadata:
     web-streams-polyfill: ^4.0.0
     zod: ^3.23.8
   peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
   languageName: unknown
   linkType: soft
 
@@ -13778,7 +13962,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.3.1":
+"yargs@npm:^17.3.1, yargs@npm:^17.6.2":
   version: 17.7.2
   resolution: "yargs@npm:17.7.2"
   dependencies:

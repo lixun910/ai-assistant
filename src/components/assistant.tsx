@@ -60,6 +60,9 @@ export function AiAssistant(props: AiAssistantProps) {
     apiKey: props.apiKey,
     instructions: props.instructions,
     functions: props.functions,
+    name: props.name,
+    description: props.description,
+    version: props.version,
   });
 
   const isScreenshotAvailable =

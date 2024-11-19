@@ -6,6 +6,7 @@ export type ScreenshotWrapperProps = {
   startScreenCapture: boolean;
   setScreenCaptured: (value: string) => void;
   setStartScreenCapture: (value: boolean) => void;
+  saveScreenshot?: boolean;
 };
 
 export function ScreenshotWrapper({
@@ -13,6 +14,7 @@ export function ScreenshotWrapper({
   startScreenCapture,
   setScreenCaptured,
   setStartScreenCapture,
+  saveScreenshot = false,
 }: ScreenshotWrapperProps) {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
@@ -176,11 +178,13 @@ export function ScreenshotWrapper({
           if (croppedCanvas.toDataURL) {
             const dataURL = croppedCanvas.toDataURL();
             setScreenCaptured(dataURL);
-            // save to file
-            const a = document.createElement('a');
-            a.href = dataURL;
-            a.download = 'screenshot.png';
-            a.click();
+            if (saveScreenshot) {
+              // save to file
+              const a = document.createElement('a');
+              a.href = dataURL;
+              a.download = 'screenshot.png';
+              a.click();
+            }
           }
         }
       );

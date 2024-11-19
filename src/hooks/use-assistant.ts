@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import { OllamaAssistant } from '../llm/ollama';
 import { GPTAssistant } from '../llm/chatgpt';
@@ -13,10 +12,13 @@ import { GoogleAssistant } from '../llm/google';
 /**
  * Props for the useAssistant hook.
  */
-export interface UseAssistantProps {
+export type UseAssistantProps = {
+  name: string;
   modelProvider: string;
   model: string;
   apiKey: string;
+  version: string;
+  description?: string;
   temperature?: number;
   topP?: number;
   instructions: string;
@@ -34,7 +36,7 @@ export interface UseAssistantProps {
     callbackFunctionContext?: CustomFunctionContext<unknown>;
     callbackMessage?: CustomMessageCallback;
   }[];
-}
+};
 
 export type SendTextMessageProps = {
   message: string;
@@ -52,7 +54,7 @@ let assistant: OllamaAssistant | GoogleAssistant | GPTAssistant | null = null;
 /**
  * A custom hook for managing an AI assistant.
  * This hook provides functionality to initialize, send messages to, and control an AI assistant.
- * 
+ *
  * @param {UseAssistantProps} props - Configuration options for the assistant.
  * @returns {Object} An object containing methods to interact with the assistant and its current status.
  */
@@ -64,6 +66,9 @@ export function useAssistant({
   topP,
   instructions,
   functions,
+  name,
+  description,
+  version,
 }: UseAssistantProps) {
   const [apiKeyStatus, setApiKeyStatus] = useState<string>('failed');
 
@@ -81,9 +86,9 @@ export function useAssistant({
         instructions,
         temperature,
         topP,
-        name: 'ai-assistant model',
-        description: 'This is ai-assistant model',
-        version: `0.0.${Math.floor(Math.random() * 1000)}`,
+        name,
+        description,
+        version,
       });
 
       // register custom functions
@@ -104,7 +109,7 @@ export function useAssistant({
 
       setApiKeyStatus('success');
     } catch (error) {
-      console.log('useAssistant initialization error', error);
+      console.error('useAssistant initialization error', error);
       setApiKeyStatus('failed');
     }
   };
@@ -121,7 +126,6 @@ export function useAssistant({
       throw new Error('LLM instance is not initialized');
     }
   };
-
 
   /**
    * Stops the current chat processing.
