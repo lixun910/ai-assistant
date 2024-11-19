@@ -38,6 +38,8 @@ describe('AiAssistant', () => {
   };
 
   const mockProps: UseAssistantProps = {
+    name: 'test-name',
+    version: 'test-version',
     modelProvider: 'openai',
     model: 'gpt-3.5-turbo',
     apiKey: 'test-api-key',
