@@ -153,7 +153,7 @@ export function ScreenshotWrapper({
     if (body) {
       // get the scale of hdpi screen
       const scale = window.devicePixelRatio;
-      html2canvas(body, { allowTaint: false, scale, backgroundColor: null}).then(
+      html2canvas(body, { scale, backgroundColor: null}).then(
         (canvas) => {
           const croppedCanvas = document.createElement('canvas');
           const croppedCanvasContext = croppedCanvas.getContext('2d');
