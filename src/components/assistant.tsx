@@ -156,7 +156,7 @@ export function AiAssistant(props: AiAssistantProps) {
       ? props.assistantAvatar || (
           <Icon icon="gravity-ui:face-robot" width="16" />
         )
-      : props.userAvatar || 'https://images.unsplash.com/broken';
+      : props.userAvatar;
   };
 
   const onMessageDragStart = (
@@ -199,7 +199,8 @@ export function AiAssistant(props: AiAssistantProps) {
                   customMessage={message.payload}
                   messageClassName={
                     message.direction == 'outgoing'
-                      ? props.userMessageClassName ?? 'bg-content3 text-content3-foreground'
+                      ? props.userMessageClassName ??
+                        'bg-content3 text-content3-foreground'
                       : props.botMessageClassName ?? 'bg-content2'
                   }
                   showFeedback={message.direction === 'incoming'}

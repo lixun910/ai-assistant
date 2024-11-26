@@ -148,46 +148,81 @@ export function ScreenshotWrapper({
     setStartScreenCapture(false);
   };
 
-  const handleClickTakeScreenShot = () => {
+  const handleClickTakeScreenShot = async () => {
     const body = document.querySelector('body');
     if (body) {
-      // get the scale of hdpi screen
       const scale = window.devicePixelRatio;
-      html2canvas(body, { scale, backgroundColor: null}).then(
-        (canvas) => {
-          const croppedCanvas = document.createElement('canvas');
-          const croppedCanvasContext = croppedCanvas.getContext('2d');
 
-          croppedCanvas.width = cropWidth;
-          croppedCanvas.height = cropHeight;
+      // Store WebGL canvas contents as image sources
+      const webGLCanvases = document.querySelectorAll('canvas');
+      const originalSrcs: string[] = [];
 
-          if (croppedCanvasContext) {
-            croppedCanvasContext.drawImage(
-              canvas,
-              cropPositionLeft * scale,
-              cropPositionTop * scale,
-              cropWidth * scale,
-              cropHeight * scale,
-              0,
-              0,
-              cropWidth,
-              cropHeight
-            );
-          }
+      // Save each canvas content as image source
+      // Request one more frame render to ensure fresh content
+      // This timing is crucial for WebGL canvases with preserveDrawingBuffer=false because it ensures we capture the frame while it's still in the buffer.
+      await new Promise<void>((resolve) => {
+        window.requestAnimationFrame(() => {
+          webGLCanvases.forEach((canvas) => {
+            originalSrcs.push(canvas.toDataURL());
+          });
+          resolve();
+        });
+      });
 
-          if (croppedCanvas.toDataURL) {
-            const dataURL = croppedCanvas.toDataURL();
-            setScreenCaptured(dataURL);
-            if (saveScreenshot) {
-              // save to file
-              const a = document.createElement('a');
-              a.href = dataURL;
-              a.download = 'screenshot.png';
-              a.click();
-            }
+      html2canvas(body, {
+        scale,
+        backgroundColor: null,
+        useCORS: true,
+        onclone: (document) => {
+          // find WebGL canvases in cloned document
+          const clonedCanvases = document.querySelectorAll('canvas');
+          clonedCanvases.forEach((canvas, index) => {
+            // get parent node
+            const parentNode = canvas.parentNode;
+            // create img element
+            const img = document.createElement('img');
+            img.src = originalSrcs[index];
+            // replace canvas with img
+            parentNode?.replaceChild(img, canvas);
+          });
+          // check the content of the document
+          document.querySelectorAll('canvas').forEach((canvas) => {
+            console.log(canvas);
+          });
+        },
+      }).then((canvas) => {
+        const croppedCanvas = document.createElement('canvas');
+        const croppedCanvasContext = croppedCanvas.getContext('2d');
+
+        croppedCanvas.width = cropWidth;
+        croppedCanvas.height = cropHeight;
+
+        if (croppedCanvasContext) {
+          croppedCanvasContext.drawImage(
+            canvas,
+            cropPositionLeft * scale,
+            cropPositionTop * scale,
+            cropWidth * scale,
+            cropHeight * scale,
+            0,
+            0,
+            cropWidth,
+            cropHeight
+          );
+        }
+
+        if (croppedCanvas.toDataURL) {
+          const dataURL = croppedCanvas.toDataURL();
+          setScreenCaptured(dataURL);
+          if (saveScreenshot) {
+            // save to file
+            const a = document.createElement('a');
+            a.href = dataURL;
+            a.download = 'screenshot.png';
+            a.click();
           }
         }
-      );
+      });
     }
     setCrossHairsLeft(0);
     setCrossHairsTop(0);

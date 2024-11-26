@@ -17,3 +17,5 @@ export {
   testGeminiConnection,
   testOllamConnection,
 } from './utils/connection-test';
+
+export { histogramFunctionDefinition } from './addons/plots/histogram';

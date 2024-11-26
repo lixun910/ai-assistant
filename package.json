@@ -1,6 +1,6 @@
 {
   "name": "react-ai-assist",
-  "version": "0.0.9",
+  "version": "0.0.13",
   "description": "AI assistant helps transform your react app into an AI-powered app.",
   "author": "Xun Li <lixun910@gmail.com>",
   "keywords": [
@@ -89,13 +89,19 @@
     "async-mutex": "^0.5.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
+    "echarts": "^5.5.1",
+    "echarts-for-react": "^3.0.2",
     "framer-motion": "^11.11.10",
+    "global": "^4.4.0",
     "globals": "^15.11.0",
     "html2canvas": "^1.4.1",
+    "lodash": "^4.17.21",
     "next-themes": "^0.3.0",
     "openai": "^4.56.0",
     "postcss": "^8.4.45",
+    "re-resizable": "^6.10.1",
     "react-audio-voice-recorder": "^2.2.0",
+    "react-virtualized-auto-sizer": "^1.0.24",
     "tailwindcss": "^3.4.11"
   },
   "peerDependencies": {

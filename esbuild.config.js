@@ -24,6 +24,7 @@ esbuild.build({
       config: './tailwind.config.js',
     }),
   ],
+  // make react and react-dom external, so that the bundle is smaller
   external: [
     'react',
     'react-dom',
