@@ -447,7 +447,7 @@ export class GPTAssistant extends AbstractAssistant {
       // create message content
       await this.openai.beta.threads.messages.create(this.thread.id, {
         role: 'user',
-        content: textMessage,
+        content: textMessage || '',
       });
 
       // create a run with stream to handle the assistant response

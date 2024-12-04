@@ -6,26 +6,42 @@ import {
   ToolMessage,
   SystemMessage,
   MessageContent,
-  MessageContentText,
+  AIMessageChunk,
 } from '@langchain/core/messages';
 
 async function strTokenCounter(
   messageContent: MessageContent
 ): Promise<number> {
+  const encoding = await encodingForModel('gpt-4');
+
   if (typeof messageContent === 'string') {
-    return (await encodingForModel('gpt-4')).encode(messageContent).length;
-  } else {
-    if (messageContent.every((x) => x.type === 'text' && x.text)) {
-      return (await encodingForModel('gpt-4')).encode(
-        (messageContent as MessageContentText[])
-          .map(({ text }) => text)
-          .join('')
-      ).length;
-    }
-    throw new Error(
-      `Unsupported message content ${JSON.stringify(messageContent)}`
-    );
+    return encoding.encode(messageContent).length;
   }
+
+  // Handle array of content
+  if (Array.isArray(messageContent)) {
+    let totalTokens = 0;
+
+    for (const content of messageContent) {
+      if (content.type === 'text') {
+        totalTokens += encoding.encode(content.text || '').length;
+      } else if ('functionCall' in content) {
+        // Handle function calls by counting name and stringified args
+        const functionCall = content.functionCall;
+        totalTokens += encoding.encode(functionCall.name).length;
+        totalTokens += encoding.encode(
+          JSON.stringify(functionCall.args)
+        ).length;
+      }
+      // Add other content types as needed
+    }
+
+    return totalTokens;
+  }
+
+  throw new Error(
+    `Unsupported message content ${JSON.stringify(messageContent)}`
+  );
 }
 
 export async function tiktokenCounter(
@@ -39,7 +55,7 @@ export async function tiktokenCounter(
     let role: string;
     if (msg instanceof HumanMessage) {
       role = 'user';
-    } else if (msg instanceof AIMessage) {
+    } else if (msg instanceof AIMessage || msg instanceof AIMessageChunk) {
       role = 'assistant';
     } else if (msg instanceof ToolMessage) {
       role = 'tool';

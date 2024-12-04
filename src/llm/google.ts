@@ -1,7 +1,7 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
 import { LangChainAssistant } from './langchain';
-import { HumanMessage, SystemMessage } from '@langchain/core/messages';
-import { AudioToTextProps } from '../types';
+import { AIMessageChunk, HumanMessage, SystemMessage } from '@langchain/core/messages';
+import { AudioToTextProps, ProcessImageMessageProps } from '../types';
 
 export class GoogleAssistant extends LangChainAssistant {
   protected aiModel: ChatGoogleGenerativeAI | null = null;
@@ -103,5 +103,51 @@ export class GoogleAssistant extends LangChainAssistant {
     // return the text content
     const transcription = JSON.parse(match[0]);
     return 'text' in transcription ? (transcription.text as string) : '';
+  }
+
+  public override async processImageMessage({
+    imageMessage,
+    textMessage,
+    streamMessageCallback,
+  }: ProcessImageMessageProps): Promise<void> {
+    if (!this.llm) {
+      throw new Error('LLM instance is not initialized');
+    }
+
+    if (!this.abortController) {
+      this.abortController = new AbortController();
+    }
+
+    const newMessage = new HumanMessage({
+      content: [
+        {
+          type: 'text',
+          text: textMessage,
+        },
+        {
+          type: 'image_url',
+          image_url: imageMessage,
+        },
+      ],
+    });
+
+    // @ts-expect-error Fix issue that message.getType is not a function in @langchain/google-genai
+    newMessage.getType = () => null;
+
+    const stream = await this.llm.stream([newMessage], {
+      signal: this.abortController?.signal,
+    });
+
+    let message = '';
+    const chunks: AIMessageChunk[] = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+      if (chunk.content.length > 0) {
+        message += chunk.content.toString();
+        streamMessageCallback({ deltaMessage: message });
+      }
+    }
+
+    streamMessageCallback({ deltaMessage: message, isCompleted: true });
   }
 }

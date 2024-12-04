@@ -68,8 +68,7 @@ export async function sendTextMessageHandler({
           }
           // check if the message is empty
           if (newMessages[newMessages.length - 1]?.message?.length === 0) {
-            newMessages[newMessages.length - 1].message =
-              'Sorry, AI has not provided any response. Please try with a different prompt.';
+            newMessages[newMessages.length - 1].message = '...';
           }
         }
       },
@@ -171,7 +170,8 @@ export async function sendImageMessageHandler({
     const newMessages: MessageModel[] = [
       ...updatedMesssages,
       {
-        message: 'Error occured while processing the request. Details: ' + error,
+        message:
+          'Error occured while processing the request. Details: ' + error,
         direction: 'incoming',
         sender: 'Error',
         position: 'normal',

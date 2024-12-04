@@ -159,11 +159,12 @@ export type UserActionProps = {
  * Type of ProcessMessageProps
  */
 export type ProcessMessageProps = {
-  textMessage: string;
+  textMessage?: string;
   imageMessage?: string;
   userActions?: UserActionProps[];
   streamMessageCallback: StreamMessageCallback;
   useTool?: boolean;
+  message?: string;
 };
 
 /**
