@@ -6,6 +6,8 @@ import {
   HumanMessage,
   ToolMessage,
   AIMessage,
+  trimMessages,
+  SystemMessage,
 } from '@langchain/core/messages';
 import {
   CustomFunctionOutputProps,
@@ -16,6 +18,7 @@ import {
 } from '../types';
 import { BindToolsInput } from '@langchain/core/language_models/chat_models';
 import { ReactNode } from 'react';
+import { tiktokenCounter } from '../utils/token-counter';
 
 export class LangChainAssistant extends AbstractAssistant {
   protected static apiKey = '';
@@ -29,6 +32,8 @@ export class LangChainAssistant extends AbstractAssistant {
   protected static topP = 0.8;
 
   protected static description = '';
+
+  protected static maxTokens = 128000;
 
   protected llm: Runnable | null = null;
 
@@ -71,6 +76,7 @@ export class LangChainAssistant extends AbstractAssistant {
     temperature,
     topP,
     description,
+    maxTokens,
   }: {
     apiKey?: string;
     model?: string;
@@ -79,6 +85,7 @@ export class LangChainAssistant extends AbstractAssistant {
     topP?: number;
     description?: string;
     version?: string;
+    maxTokens?: number;
   }) {
     if (apiKey) LangChainAssistant.apiKey = apiKey;
     if (model) LangChainAssistant.model = model;
@@ -86,6 +93,7 @@ export class LangChainAssistant extends AbstractAssistant {
     if (temperature) LangChainAssistant.temperature = temperature;
     if (topP) LangChainAssistant.topP = topP;
     if (description) LangChainAssistant.description = description;
+    if (maxTokens) LangChainAssistant.maxTokens = maxTokens;
   }
 
   public static override registerFunctionCalling({
@@ -121,13 +129,9 @@ export class LangChainAssistant extends AbstractAssistant {
 
   public override async addAdditionalContext({ context }: { context: string }) {
     // since the context of the conversation is already stored in the messages array,
-    // we can simply add user message with the context to the messages array
-    this.messages.push(new HumanMessage(context));
-    // simulate an empty assistant message as a response
-    this.messages.push(
-      new AIMessage(
-        'OK. Data context received. No further action required. No response will be generated.'
-      )
+    // append the context to the first message which is the system message
+    this.messages[0] = new SystemMessage(
+      `${LangChainAssistant.instructions}\n\n${context}`
     );
   }
 
@@ -145,6 +149,15 @@ export class LangChainAssistant extends AbstractAssistant {
     this.llm = null;
   }
 
+  protected async trimMessages() {
+    return await trimMessages(this.messages, {
+      maxTokens: LangChainAssistant.maxTokens,
+      strategy: 'last',
+      includeSystem: true,
+      tokenCounter: tiktokenCounter,
+    });
+  }
+
   public override async processTextMessage({
     textMessage,
     streamMessageCallback,
@@ -159,7 +172,7 @@ export class LangChainAssistant extends AbstractAssistant {
 
     this.messages.push(new HumanMessage(textMessage));
 
-    const stream = await this.llm.stream(this.messages, {
+    const stream = await this.llm.stream(await this.trimMessages(), {
       signal: this.abortController?.signal,
     });
     const chunks: AIMessageChunk[] = [];
@@ -181,7 +194,7 @@ export class LangChainAssistant extends AbstractAssistant {
     let customMessage: ReactNode | null = null;
 
     if (finalChunk) {
-      this.messages.push(finalChunk);
+      this.messages.push(new AIMessage(finalChunk.content.toString()));
 
       if (finalChunk.tool_calls && useTool) {
         const functionOutput: CustomFunctionOutputProps<unknown, unknown>[] =
@@ -238,7 +251,7 @@ export class LangChainAssistant extends AbstractAssistant {
         }
 
         if (functionOutput.length > 0) {
-          const stream = await this.llm.stream(this.messages, {
+          const stream = await this.llm.stream(await this.trimMessages(), {
             signal: this.abortController?.signal,
           });
           if (message.length > 0) {
@@ -298,9 +311,9 @@ export class LangChainAssistant extends AbstractAssistant {
     });
 
     // TODO: do we need to add the image message to the messages array as context?
-    this.messages.push(newMessage);
+    // this.messages.push(newMessage);
 
-    const stream = await this.llm.stream(this.messages, {
+    const stream = await this.llm.stream([newMessage], {
       signal: this.abortController?.signal,
     });
 
@@ -314,12 +327,11 @@ export class LangChainAssistant extends AbstractAssistant {
       }
     }
 
-    let finalChunk = chunks[0];
-    for (const chunk of chunks.slice(1)) {
-      finalChunk = finalChunk.concat(chunk);
-    }
-
-    this.messages.push(finalChunk);
+    // let finalChunk = chunks[0];
+    // for (const chunk of chunks.slice(1)) {
+    //   finalChunk = finalChunk.concat(chunk);
+    // }
+    // this.messages.push(finalChunk);
 
     streamMessageCallback({ deltaMessage: message, isCompleted: true });
   }

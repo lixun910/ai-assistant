@@ -6,7 +6,13 @@ import PromptInput from './prompt-input';
 import VoiceChatButton from './voice-chat-button';
 
 type PromptInputWithBottomActionsProps = {
-  ideas?: {title: string; description: string}[];
+  ideas?: {
+    title: string;
+    description: string;
+    icon?: string;
+    context?: string;
+    callback?: () => void;
+  }[];
   onSendMessage: (message: string) => void;
   onVoiceMessage: (voice: Blob) => Promise<string>;
   enableVoice?: boolean;
@@ -63,9 +69,20 @@ export default function Component({
     }
   };
 
-  const onClickIdea = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { textContent } = e.currentTarget;
-    setPrompt(textContent || '');
+  const onClickIdea = (index: number) => {
+    const idea = ideas?.[index];
+    if (idea) {
+      if (idea.context && idea.context.length > 0) {
+        const content = `${idea.context}`;
+        onSendMessage(content);
+      } else {
+        const content = `${idea.title}\n${idea.description}`;
+        setPrompt(content);
+      }
+      if (idea.callback) {
+        idea.callback();
+      }
+    }
   };
 
   const onRecordingComplete = async (voiceBlob: Blob) => {
@@ -87,21 +104,29 @@ export default function Component({
   }, [screenCaptured, defaultPromptText, onSendClick]);
 
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-2">
       <ScrollShadow
         hideScrollBar
         className="flex flex-nowrap gap-2"
         orientation="horizontal"
       >
         <div className="flex gap-2">
-          {ideas?.map(({ title, description }, index) => (
+          {ideas?.map(({ title, description, icon, context }, index) => (
             <Button
-              onClick={onClickIdea}
+              onClick={() => onClickIdea(index)}
               key={index}
-              className="flex h-14 flex-col items-start gap-0"
-              variant="flat"
+              className="flex h-14 flex-col items-start gap-0 max-w-60"
             >
-              <p>{title}</p>
+              <div className="flex items-center gap-2 flex-row">
+                {icon && (
+                  <Icon
+                    icon={icon}
+                    width={12}
+                    className={`${context} ? 'animate-ping':''`}
+                  />
+                )}
+                <p>{title}</p>
+              </div>
               <p className="text-default-500">{description}</p>
             </Button>
           ))}
@@ -156,7 +181,9 @@ export default function Component({
                   radius="lg"
                   size="sm"
                   variant="solid"
-                  data-testid={status === 'pending' ? "stop-button" : "send-button"}
+                  data-testid={
+                    status === 'pending' ? 'stop-button' : 'send-button'
+                  }
                   onClick={status === 'pending' ? onStopClick : onSendClick}
                 >
                   <Icon
@@ -233,10 +260,7 @@ export default function Component({
                 onPress={onRestartChatClick}
                 data-testid="restart-button"
               >
-                <Icon
-                  className="text-default-600"
-                  icon="lucide:list-restart"
-                />
+                <Icon className="text-default-600" icon="lucide:list-restart" />
               </Button>
             </Tooltip>
           </div>

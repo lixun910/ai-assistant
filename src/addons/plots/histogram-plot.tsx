@@ -4,7 +4,7 @@ import { Resizable } from 're-resizable';
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import ReactEChartsCore from 'echarts-for-react';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import * as echarts from 'echarts/core';
+import { use as echartsUse, registerTheme as echartsRegisterTheme } from 'echarts/core';
 import { BarChart } from 'echarts/charts';
 import {
   GridComponent,
@@ -13,14 +13,15 @@ import {
   ToolboxComponent,
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-import { useTheme } from 'next-themes';
-
-import { ECHARTS_DARK_THEME } from '../echarts/echarts-theme';
-import { CustomFunctionCall } from '../../types';
-import { HistogramOuputData } from './histogram';
 import { TopLevelFormatterParams } from 'echarts/types/dist/shared';
 
-echarts.use([
+import { ECHARTS_DARK_THEME } from '../echarts/echarts-theme';
+import { useTheme } from 'next-themes';
+
+import { CustomFunctionCall } from '../../types';
+import { HistogramOuputData } from './histogram';
+
+echartsUse([
   BarChart,
   GridComponent,
   TooltipComponent,
@@ -29,7 +30,7 @@ echarts.use([
   CanvasRenderer,
 ]);
 
-echarts.registerTheme('dark', ECHARTS_DARK_THEME);
+echartsRegisterTheme('dark', ECHARTS_DARK_THEME);
 
 export function ResizablePlotContainer({ children }: { children: ReactNode }) {
   return (
@@ -84,22 +85,20 @@ export function HistogramComponent({
   output,
 }: CustomFunctionCall): ReactNode | null {
   const { theme: systemTheme } = useTheme();
-  const {
-    datasetName,
-    variableName,
-    histogramData,
-    barDataIndexes,
-    onSelected,
-  } = output.data as HistogramOuputData;
+  const data = output.data as HistogramOuputData;
 
   // get chart option by calling getChartOption only once
   const option = useMemo(() => {
     try {
-      return getHistogramChartOption(null, histogramData, barDataIndexes);
+      return getHistogramChartOption(
+        null,
+        data.histogramData,
+        data.barDataIndexes
+      );
     } catch {
       return {};
     }
-  }, [histogramData, barDataIndexes]);
+  }, [data.histogramData, data.barDataIndexes]);
 
   const eChartsRef = useRef<ReactEChartsCore>(null);
   // track if the chart has been rendered, so we can update the chart later
@@ -128,7 +127,9 @@ export function HistogramComponent({
         // get selected ids from brushed bars
         const filteredIndex =
           brushed.length > 0
-            ? brushed.map((idx: number) => barDataIndexes[idx]).flat()
+            ? brushed
+                .map((idx: number) => data.barDataIndexes[idx])
+                .flat()
             : [];
 
         // check if this plot is in state.plots
@@ -139,19 +140,19 @@ export function HistogramComponent({
             const chartInstance = chart.getEchartsInstance();
             const updatedOption = getHistogramChartOption(
               null,
-              histogramData,
-              barDataIndexes
+              data.histogramData,
+              data.barDataIndexes
             );
             chartInstance.setOption(updatedOption);
           }
         }
         // Dispatch action to highlight selected in other components
-        onSelected?.(datasetName, filteredIndex);
+        data.onSelected?.(data.datasetName, filteredIndex);
       },
     };
-  }, [barDataIndexes, onSelected, histogramData]);
+  }, [data.barDataIndexes, data.onSelected, data.histogramData]);
 
-  if (!variableName || !histogramData || !barDataIndexes) {
+  if (!data.variableName || !data.histogramData || !data.barDataIndexes) {
     return null;
   }
 
@@ -161,14 +162,15 @@ export function HistogramComponent({
         <div style={{ height, width }}>
           <Card className="h-full w-full" shadow="none">
             <CardHeader className="flex-col items-start px-4 pb-0 pt-2">
-              <p className="text-tiny font-bold uppercase">{variableName}</p>
+              <p className="text-tiny font-bold uppercase">
+                {data.variableName}
+              </p>
               <small className="truncate text-default-500">
-                {variableName}
+                {data.variableName}
               </small>
             </CardHeader>
             <CardBody className="py-2">
               <ReactEChartsCore
-                echarts={echarts}
                 option={option}
                 notMerge={true}
                 lazyUpdate={true}

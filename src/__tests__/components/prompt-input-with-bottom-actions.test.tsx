@@ -110,7 +110,7 @@ describe('PromptInputWithBottomActions Component', () => {
     await act(async () => {
       fireEvent.click(ideaButton);
     });
-    expect(screen.getByRole('textbox')).toHaveValue('Idea 1Description 1');
+    expect(screen.getByRole('textbox')).toHaveValue('Idea 1\nDescription 1');
   });
 
   it('calls onRemoveScreenshot when remove screenshot button is clicked', async () => {

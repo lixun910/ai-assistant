@@ -190,6 +190,8 @@ export class GPTAssistant extends AbstractAssistant {
               await this.openai.beta.threads.runs.cancel(threadId, run.id);
             }
           });
+          // wait for all runs to be cancelled
+          throw new Error('all runs are cancelled');
         }
       }
     } catch (e) {
@@ -200,7 +202,11 @@ export class GPTAssistant extends AbstractAssistant {
 
   public override async close() {
     if (this.thread) {
-      await this.stop();
+      try {
+        await this.stop();
+      } catch {
+        // ignore the error
+      }
       await this.openai.beta.threads.del(this.thread.id);
       if (this.assistant) {
         await this.openai.beta.assistants.del(this.assistant.id);
@@ -475,10 +481,6 @@ export class GPTAssistant extends AbstractAssistant {
           // stream the message back to the UI
           streamMessageCallback({ deltaMessage: this.lastMessage });
         } else if (event.event === 'thread.run.failed') {
-          streamMessageCallback({
-            deltaMessage: 'Sorry, run failed.',
-            isCompleted: true,
-          });
           throw new Error(`${event.data}`);
         }
       }
@@ -518,6 +520,10 @@ export class GPTAssistant extends AbstractAssistant {
       // reset custom message
       this.customMessage = null;
     } catch (e) {
+      streamMessageCallback({
+        deltaMessage: `Sorry, something went wrong. Please try again later. ${e}`,
+        isCompleted: true,
+      });
       console.error('processTextMessage() error: ', e);
     } finally {
       release();

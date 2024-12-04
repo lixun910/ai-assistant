@@ -1,5 +1,6 @@
 import { ChatOllama } from '@langchain/ollama';
 import {
+  AIMessage,
   AIMessageChunk,
   HumanMessage,
   SystemMessage,
@@ -107,6 +108,7 @@ export class OllamaAssistant extends LangChainAssistant {
     if (temperature) LangChainAssistant.temperature = temperature;
     if (topP) LangChainAssistant.topP = topP;
     if (description) LangChainAssistant.description = description;
+    LangChainAssistant.maxTokens = 8192;
   }
 
   public override async processTextMessage({
@@ -139,7 +141,8 @@ export class OllamaAssistant extends LangChainAssistant {
     if (useTool === false) {
       // use ollama model to answer the question directly
       this.messages.push(new HumanMessage(textMessage));
-      const stream = await this.aiModel.stream(this.messages);
+      const trimmedMessages = await this.trimMessages();
+      const stream = await this.aiModel.stream(trimmedMessages);
       const chunks: AIMessageChunk[] = [];
       let message = '';
 
@@ -156,7 +159,7 @@ export class OllamaAssistant extends LangChainAssistant {
       for (const chunk of chunks.slice(1)) {
         finalChunk = finalChunk.concat(chunk);
       }
-      this.messages.push(finalChunk);
+      this.messages.push(new AIMessage(finalChunk.content.toString()));
 
       streamMessageCallback({ deltaMessage: message, isCompleted: true });
     } else {

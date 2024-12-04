@@ -28,6 +28,7 @@ export class OpenAIAssistant extends LangChainAssistant {
     // initialize openAI client
     this.openAIClient = new OpenAIClient({
       apiKey: OpenAIAssistant.apiKey,
+      dangerouslyAllowBrowser: true,
     });
   }
 

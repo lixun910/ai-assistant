@@ -26,6 +26,7 @@ export type AiAssistantProps = UseAssistantProps & {
   onRemoveScreenshot?: () => void;
   onFeedback?: (question: string) => void;
   onMessagesUpdated?: (messages: MessageModel[]) => void;
+  onRestartChat?: () => void;
   fontSize?: string;
   botMessageClassName?: string;
   userMessageClassName?: string;
@@ -140,6 +141,9 @@ export function AiAssistant(props: AiAssistantProps) {
 
     // restart the assistant
     await restartChat();
+
+    // call the onRestartChat callback
+    props.onRestartChat?.();
   };
 
   // scroll to bottom when new message is added

@@ -72,7 +72,8 @@ describe('stop and close', () => {
     });
     const instance = await GPTAssistant.getInstance();
 
-    await instance.stop();
+    // await instance.stop();
+    await expect(instance.stop()).rejects.toThrow('all runs are cancelled');
 
     // Wait for any pending promises to resolve
     await new Promise(process.nextTick);
@@ -94,7 +95,11 @@ describe('stop and close', () => {
       name: 'Test Assistant',
     });
     const instance = await GPTAssistant.getInstance();
+
     await instance.close();
+
+    // Wait for any pending promises to resolve
+    await new Promise(process.nextTick);
 
     expect(mockThreadDelete).toHaveBeenCalledTimes(1);
     expect(mockThreadDelete).toHaveBeenCalledWith('test-thread-id');
@@ -560,7 +565,8 @@ describe('prompts', () => {
 
       expect(mockStreamMessageCallback).toHaveBeenCalledTimes(1);
       expect(mockStreamMessageCallback).toHaveBeenNthCalledWith(1, {
-        deltaMessage: 'Sorry, run failed.',
+        deltaMessage:
+          'Sorry, something went wrong. Please try again later. Error: thread run failed',
         isCompleted: true,
       });
       // finalRun should not be called

@@ -6,7 +6,7 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
   "baseElement": <body>
     <div>
       <div
-        class="flex w-full flex-col gap-4"
+        class="flex w-full flex-col gap-2"
       >
         <div
           class="overflow-x-auto data-[left-scroll=true]:[mask-image:linear-gradient(270deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[right-scroll=true]:[mask-image:linear-gradient(90deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[left-right-scroll=true]:[mask-image:linear-gradient(to_right,#000,#000,transparent_0,#000_var(--scroll-shadow-size),#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] scrollbar-hide flex flex-nowrap gap-2"
@@ -19,12 +19,16 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
             class="flex gap-2"
           >
             <button
-              class="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-4 min-w-20 text-small rounded-medium [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-700 data-[hover=true]:opacity-hover flex h-14 flex-col items-start gap-0"
+              class="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-4 min-w-20 text-small rounded-medium [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground data-[hover=true]:opacity-hover flex h-14 flex-col items-start gap-0 max-w-60"
               type="button"
             >
-              <p>
-                Idea 1
-              </p>
+              <div
+                class="flex items-center gap-2 flex-row"
+              >
+                <p>
+                  Idea 1
+                </p>
+              </div>
               <p
                 class="text-default-500"
               >
@@ -148,7 +152,7 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
   </body>,
   "container": <div>
     <div
-      class="flex w-full flex-col gap-4"
+      class="flex w-full flex-col gap-2"
     >
       <div
         class="overflow-x-auto data-[left-scroll=true]:[mask-image:linear-gradient(270deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[right-scroll=true]:[mask-image:linear-gradient(90deg,#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] data-[left-right-scroll=true]:[mask-image:linear-gradient(to_right,#000,#000,transparent_0,#000_var(--scroll-shadow-size),#000_calc(100%_-_var(--scroll-shadow-size)),transparent)] scrollbar-hide flex flex-nowrap gap-2"
@@ -161,12 +165,16 @@ exports[`PromptInputWithBottomActions Component renders without crashing 1`] = `
           class="flex gap-2"
         >
           <button
-            class="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-4 min-w-20 text-small rounded-medium [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default/40 text-default-700 data-[hover=true]:opacity-hover flex h-14 flex-col items-start gap-0"
+            class="z-0 group relative justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent data-[pressed=true]:scale-[0.97] outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-4 min-w-20 text-small rounded-medium [&>svg]:max-w-[theme(spacing.8)] transition-transform-colors-opacity motion-reduce:transition-none bg-default text-default-foreground data-[hover=true]:opacity-hover flex h-14 flex-col items-start gap-0 max-w-60"
             type="button"
           >
-            <p>
-              Idea 1
-            </p>
+            <div
+              class="flex items-center gap-2 flex-row"
+            >
+              <p>
+                Idea 1
+              </p>
+            </div>
             <p
               class="text-default-500"
             >

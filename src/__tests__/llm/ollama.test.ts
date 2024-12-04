@@ -3,6 +3,11 @@ import { OllamaAssistant } from '../../llm/ollama';
 import { ChatOllama } from '@langchain/ollama';
 
 jest.mock('@langchain/ollama');
+// mock trimMessages from @langchain/core/messages
+jest.mock('@langchain/core/messages', () => ({
+  ...jest.requireActual('@langchain/core/messages'),
+  trimMessages: jest.fn(),
+}));
 
 describe('OllamaAssistant', () => {
   beforeEach(async () => {
@@ -176,141 +181,146 @@ describe('OllamaAssistant', () => {
     }
   }
 
-  test('should process text message and return response', async () => {
-    const mockStreamMessageCallback = jest.fn();
-    const textMessage = 'What is the weather today?';
+  describe('should process text message and return response', () => {
 
-    // Mock the stream method of ChatOllama to return a response that the prompt cannot be answered by a tool
-    const mockFirstStream = jest.fn().mockResolvedValue([new Response('No')]);
-    const mockSecondStream = jest
-      .fn()
-      .mockResolvedValue([
-        new Response('It '),
-        new Response('is '),
-        new Response('sunny.'),
-      ]);
-    let streamCount = 0;
-    (ChatOllama as unknown as jest.Mock).mockImplementation(() => ({
-      bind: jest.fn(),
-      stream: () => {
-        if (streamCount === 0) {
-          streamCount++;
-          return mockFirstStream();
-        } else {
-          return mockSecondStream();
-        }
-      },
-    }));
+    test('should process text message and return response', async () => {
+      const mockStreamMessageCallback = jest.fn();
+      const textMessage = 'What is the weather today?';
 
-    OllamaAssistant.configure({
-      baseUrl: 'http://localhost:3000',
-      model: 'test-model',
-    });
-    const instance = await OllamaAssistant.getInstance();
-
-    await instance.processTextMessage({
-      textMessage,
-      streamMessageCallback: mockStreamMessageCallback,
-    });
-
-    expect(mockFirstStream).toHaveBeenCalled();
-    expect(mockSecondStream).toHaveBeenCalled();
-    expect(mockStreamMessageCallback).toHaveBeenCalledWith({
-      deltaMessage: 'It is sunny.',
-      isCompleted: true,
-    });
-  });
-
-  class ResponseWithTool {
-    content: string;
-    tool_calls: unknown[];
-    concat: (res: ResponseWithTool) => ResponseWithTool;
-    constructor(content: string, tool_calls: unknown[]) {
-      this.content = content;
-      this.tool_calls = tool_calls;
-      this.concat = (res) =>
-        new ResponseWithTool(this.content + res.content, this.tool_calls);
-    }
-  }
-
-  test('should process text message using tools', async () => {
-    const mockStreamMessageCallback = jest.fn();
-
-    const mockCallbackFunction = jest.fn();
-    const textMessage = 'What is the temperature in Tokyo?';
-
-    // Mock the stream method of ChatOllama to return a response that the prompt cannot be answered by a tool
-    const mockToolCalls = [
-      {
-        name: 'get_temperature',
-        args: { city: 'Tokyo' },
-      },
-    ];
-    const mockFirstStream = jest
-      .fn()
-      .mockResolvedValue([new ResponseWithTool('Yes', mockToolCalls)]);
-    const mockSecondStream = jest
-      .fn()
-      .mockResolvedValue([
-        new ResponseWithTool('80 ', mockToolCalls),
-        new ResponseWithTool('degrees Fahrenheit.', mockToolCalls),
-      ]);
-    let toolStreamCount = 0;
-    (ChatOllama as unknown as jest.Mock).mockImplementation(() => ({
-      // aiModel.bind(tools) stream() for tool calling
-      bind: () => ({
+      // Mock the stream method of ChatOllama to return a response that the prompt cannot be answered by a tool
+      const mockFirstStream = jest.fn().mockResolvedValue([new Response('No')]);
+      const mockSecondStream = jest
+        .fn()
+        .mockResolvedValue([
+          new Response('It '),
+          new Response('is '),
+          new Response('sunny.'),
+        ]);
+      let streamCount = 0;
+      (ChatOllama as unknown as jest.Mock).mockImplementation(() => ({
+        bind: jest.fn(),
         stream: () => {
-          if (toolStreamCount === 0) {
-            toolStreamCount++;
+          if (streamCount === 0) {
+            streamCount++;
             return mockFirstStream();
           } else {
             return mockSecondStream();
           }
         },
-      }),
-      // aiModel stream() for checking if the prompt can be answered by a tool
-      stream: () => mockFirstStream(),
-    }));
+      }));
 
-    OllamaAssistant.configure({
-      baseUrl: 'http://localhost:3000',
-      model: 'test-model',
-    });
-    OllamaAssistant.registerFunctionCalling({
-      name: 'get_temperature',
-      description: 'Get the temperature of a city',
-      properties: {
-        city: {
-          type: 'string',
-          description: 'The city to get the temperature of',
-        },
-      },
-      required: ['city'],
-      callbackFunction: mockCallbackFunction,
-    });
-    const instance = await OllamaAssistant.getInstance();
+      OllamaAssistant.configure({
+        baseUrl: 'http://localhost:3000',
+        model: 'test-model',
+      });
+      const instance = await OllamaAssistant.getInstance();
 
-    await instance.processTextMessage({
-      textMessage,
-      streamMessageCallback: mockStreamMessageCallback,
-    });
+      await instance.processTextMessage({
+        textMessage,
+        streamMessageCallback: mockStreamMessageCallback,
+      });
 
-    // Wait for any pending promises to resolve
-    await new Promise(process.nextTick);
-
-    expect(mockFirstStream).toHaveBeenCalledTimes(2);
-    expect(mockSecondStream).toHaveBeenCalledTimes(1);
-    expect(mockCallbackFunction).toHaveBeenCalled();
-
-    expect(mockStreamMessageCallback.mock.calls).toEqual([
-      [{ deltaMessage: 'Yes' }],
-      [{ deltaMessage: 'Yes\n\n80 ' }],
-      [{ deltaMessage: 'Yes\n\n80 degrees Fahrenheit.' }],
-      [{
-        deltaMessage: 'Yes\n\n80 degrees Fahrenheit.',
-        customMessage: null,
+      expect(mockFirstStream).toHaveBeenCalled();
+      expect(mockSecondStream).toHaveBeenCalled();
+      expect(mockStreamMessageCallback).toHaveBeenCalledWith({
+        deltaMessage: 'It is sunny.',
         isCompleted: true,
-      }]
-    ]);
+      });
+    });
+
+    class ResponseWithTool {
+      content: string;
+      tool_calls: unknown[];
+      concat: (res: ResponseWithTool) => ResponseWithTool;
+      constructor(content: string, tool_calls: unknown[]) {
+        this.content = content;
+        this.tool_calls = tool_calls;
+        this.concat = (res) =>
+          new ResponseWithTool(this.content + res.content, this.tool_calls);
+      }
+    }
+
+    test('should process text message using tools', async () => {
+      const mockStreamMessageCallback = jest.fn();
+
+      const mockCallbackFunction = jest.fn();
+      const textMessage = 'What is the temperature in Tokyo?';
+
+      // Mock the stream method of ChatOllama to return a response that the prompt cannot be answered by a tool
+      const mockToolCalls = [
+        {
+          name: 'get_temperature',
+          args: { city: 'Tokyo' },
+        },
+      ];
+      const mockFirstStream = jest
+        .fn()
+        .mockResolvedValue([new ResponseWithTool('Yes', mockToolCalls)]);
+      const mockSecondStream = jest
+        .fn()
+        .mockResolvedValue([
+          new ResponseWithTool('80 ', mockToolCalls),
+          new ResponseWithTool('degrees Fahrenheit.', mockToolCalls),
+        ]);
+      let toolStreamCount = 0;
+      (ChatOllama as unknown as jest.Mock).mockImplementation(() => ({
+        // aiModel.bind(tools) stream() for tool calling
+        bind: () => ({
+          stream: () => {
+            if (toolStreamCount === 0) {
+              toolStreamCount++;
+              return mockFirstStream();
+            } else {
+              return mockSecondStream();
+            }
+          },
+        }),
+        // aiModel stream() for checking if the prompt can be answered by a tool
+        stream: () => mockFirstStream(),
+      }));
+
+      OllamaAssistant.configure({
+        baseUrl: 'http://localhost:3000',
+        model: 'test-model',
+      });
+      OllamaAssistant.registerFunctionCalling({
+        name: 'get_temperature',
+        description: 'Get the temperature of a city',
+        properties: {
+          city: {
+            type: 'string',
+            description: 'The city to get the temperature of',
+          },
+        },
+        required: ['city'],
+        callbackFunction: mockCallbackFunction,
+      });
+      const instance = await OllamaAssistant.getInstance();
+
+      await instance.processTextMessage({
+        textMessage,
+        streamMessageCallback: mockStreamMessageCallback,
+      });
+
+      // Wait for any pending promises to resolve
+      await new Promise(process.nextTick);
+
+      expect(mockFirstStream).toHaveBeenCalledTimes(2);
+      expect(mockSecondStream).toHaveBeenCalledTimes(1);
+      expect(mockCallbackFunction).toHaveBeenCalled();
+
+      expect(mockStreamMessageCallback.mock.calls).toEqual([
+        [{ deltaMessage: 'Yes' }],
+        [{ deltaMessage: 'Yes\n\n80 ' }],
+        [{ deltaMessage: 'Yes\n\n80 degrees Fahrenheit.' }],
+        [
+          {
+            deltaMessage: 'Yes\n\n80 degrees Fahrenheit.',
+            customMessage: null,
+            isCompleted: true,
+          },
+        ],
+      ]);
+    });
   });
 });

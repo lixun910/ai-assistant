@@ -8,6 +8,7 @@ import {
   StreamMessageCallback,
 } from '../types';
 import { GoogleAssistant } from '../llm/google';
+import { OpenAIAssistant } from '../llm/openai';
 
 /**
  * Props for the useAssistant hook.
@@ -49,7 +50,12 @@ export type SendImageMessageProps = {
   streamMessageCallback: StreamMessageCallback;
 };
 
-let assistant: OllamaAssistant | GoogleAssistant | GPTAssistant | null = null;
+let assistant:
+  | OllamaAssistant
+  | GoogleAssistant
+  | GPTAssistant
+  | OpenAIAssistant
+  | null = null;
 
 /**
  * A custom hook for managing an AI assistant.
@@ -220,7 +226,7 @@ export function useAssistant({
 function GetAssistantModelByProvider(provider: string) {
   switch (provider.toLowerCase()) {
     case 'openai':
-      return GPTAssistant;
+      return OpenAIAssistant;
     case 'google':
       return GoogleAssistant;
     case 'ollama':
