@@ -10,6 +10,27 @@ import {
   sendTextMessageHandler,
 } from './assistant-utils';
 
+/**
+ * Type of AiAssistantProps. It extends {@link UseAssistantProps}.
+ * 
+ * @param theme - The theme of the assistant.
+ * @param welcomeMessage - The welcome message of the assistant.
+ * @param historyMessages - The history messages of the assistant.
+ * @param ideas - The ideas of the assistant.
+ * @param userAvatar - The avatar of the user.
+ * @param assistantAvatar - The avatar of the assistant.
+ * @param isMessageDraggable - The flag to indicate if the message is draggable.
+ * @param enableVoice - The flag to indicate if the voice is enabled.
+ * @param enableScreenCapture - The flag to indicate if the screen capture is enabled.
+ * @param screenCapturedBase64 - The screen captured base64.
+ * @param screenCapturedPrompt - The screen captured prompt.
+ * @param onScreenshotClick - The callback function to handle the screenshot click.
+ * @param onRemoveScreenshot - The callback function to handle the screenshot remove.
+ * @param onFeedback - The callback function to handle the feedback.
+ * @param onMessagesUpdated - The callback function to handle the messages updated.
+ * @param onRestartChat - The callback function to handle the restart chat.
+ * @param fontSize - The font size of the assistant.
+ */
 export type AiAssistantProps = UseAssistantProps & {
   theme?: 'dark' | 'light';
   welcomeMessage: string;
@@ -33,6 +54,11 @@ export type AiAssistantProps = UseAssistantProps & {
   githubIssueLink?: string;
 };
 
+/**
+ * Creates a welcome message.
+ * @param welcomeMessage - The welcome message.
+ * @returns The welcome message.
+ */
 const createWelcomeMessage = (welcomeMessage: string): MessageModel => ({
   message: welcomeMessage,
   sentTime: 'just now',
@@ -41,6 +67,11 @@ const createWelcomeMessage = (welcomeMessage: string): MessageModel => ({
   position: 'first',
 });
 
+/**
+ * The Assistant react component.
+ * @param props - The props of the Assistant component. See {@link AiAssistantProps} for more details.
+ * @returns The Assistant component.
+ */
 export function AiAssistant(props: AiAssistantProps) {
   const [messages, setMessages] = useState<MessageModel[]>(
     props.historyMessages && props.historyMessages.length > 0

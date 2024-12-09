@@ -7,14 +7,49 @@ import {
 } from '../../types';
 import { histogramCallbackMessage, HistogramDataProps } from './histogram-plot';
 
+/**
+ * The function of getting the values of a variable from the dataset.
+ * @param datasetName - The name of the dataset.
+ * @param variableName - The name of the variable.
+ * @returns The values of the variable.
+ */
+export type GetValues = (datasetName: string, variableName: string) => number[];
+
+/**
+ * The callback function can be used to sync the selections of the histogram plot with the original dataset.
+ * @param datasetName - The name of the dataset.
+ * @param selectedIndices - The indices of the selected bars in the histogram plot.
+ */
+export type OnSelectedCallback = (
+  datasetName: string,
+  selectedIndices: number[]
+) => void;
+
+/**
+ * The context of the histogram function.
+ * @param getValues - Get the values of a variable from the dataset. See {@link GetValues} for more details.
+ * @param onSelected - The callback function can be used to sync the selections of the histogram plot with the original dataset. See {@link OnSelectedCallback} for more details.
+ */
 export type HistogramFunctionContext = {
-  getValues: (datasetName: string, variableName: string) => number[];
-  onSelected?: (datasetName: string, selectedIndices: number[]) => void;
+  getValues: GetValues;
+  onSelected?: OnSelectedCallback;
 };
 
 type ValueOf<T> = T[keyof T];
 type HistogramFunctionContextValues = ValueOf<HistogramFunctionContext>;
 
+/**
+ * Define the histogram function. This function can assist user to create a histogram plot using the values of a variable in the dataset.
+ * The values should be retrieved using the getValues() callback function.
+ * 
+ * User can select the bars in the histogram plot, and the selections can be synced back to the original dataset using the onSelected() callback.
+ * See {@link OnSelectedCallback} for more details.
+ * 
+ * @param context - The context of the function. See {@link HistogramFunctionContext} for more details.
+ * @param context.getValues - Get the values of a variable from the dataset. See {@link GetValues} for more details.
+ * @param context.onSelected - The callback function can be used to sync the selections of the histogram plot with the original dataset. See {@link OnSelectedCallback} for more details.
+ * @returns The function definition.
+ */
 export function histogramFunctionDefinition(
   context: CustomFunctionContext<HistogramFunctionContextValues>
 ): RegisterFunctionCallingProps {

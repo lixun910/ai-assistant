@@ -11,7 +11,25 @@ import { GoogleAssistant } from '../llm/google';
 import { OpenAIAssistant } from '../llm/openai';
 
 /**
- * Props for the useAssistant hook.
+ * Props for the Assistant UI and useAssistant hook.
+ * 
+ * @param name - The name of the assistant.
+ * @param modelProvider - The model provider.
+ * @param model - The model.
+ * @param apiKey - The API key.
+ * @param version - The version.
+ * @param description - The description.
+ * @param temperature - The temperature.
+ * @param topP - The topP.
+ * @param instructions - The instructions.
+ * @param functions - The functions.
+ * @param functions.name - The name of the function.
+ * @param functions.description - The description of the function.
+ * @param functions.properties - The properties of the function.
+ * @param functions.required - The required properties of the function.
+ * @param functions.callbackFunction - The callback function of the function. See {@link CallbackFunction} for more details.
+ * @param functions.callbackFunctionContext - The context of the callback function. See {@link CustomFunctionContext} for more details.
+ * @param functions.callbackMessage - The message of the callback function. See {@link CustomMessageCallback} for more details.
  */
 export type UseAssistantProps = {
   name: string;
@@ -39,11 +57,24 @@ export type UseAssistantProps = {
   }[];
 };
 
+/**
+ * Type of SendTextMessageProps
+ * 
+ * @param message - The message to be sent.
+ * @param streamMessageCallback - The stream message callback to stream the message back to the UI. See {@link StreamMessageCallback} for more details.
+ */
 export type SendTextMessageProps = {
   message: string;
   streamMessageCallback: StreamMessageCallback;
 };
 
+/**
+ * Type of SendImageMessageProps
+ * 
+ * @param imageBase64String - The image base64 string to be sent.
+ * @param message - The message to be sent.
+ * @param streamMessageCallback - The stream message callback to stream the message back to the UI. See {@link StreamMessageCallback} for more details.
+ */
 export type SendImageMessageProps = {
   imageBase64String: string;
   message: string;

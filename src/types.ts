@@ -51,14 +51,27 @@ export interface MessageModel {
 }
 
 /**
- * Context objects for custom functions
+ * Context object for custom functions. The context object can be used to pass data from your react app to custom functions.
+ * The context object (*) will be used in the following work flow: 
+ * 1. User sends a prompt to LLM.
+ * 2. LLM calls a custom function if needed.
+ * 3. The custom function will be executed using the context object e.g. get data from your react app.
+ * 4. The custom function will return a result to LLM.
+ * 5. The result will be sent back to the UI.
+ * 6. The CustomMessageCallback will be used to create a custom message to the UI.
+ * 
+ * @param key - The key of the context object.
+ * @param value - The value of the context object.
  */
 export type CustomFunctionContext<C> = {
   [key: string]: C;
 };
 
 /**
+ * Custom function to get the context object.
  * 
+ * To support custom function execution, you can pass the context object to the custom function (see {@link CustomFunctionContext}).
+ * You can also define a custom function to get the context object.
  */
 export type CustomFunctionContextCallback<C> = () => CustomFunctionContext<C>;
 
@@ -85,11 +98,25 @@ export type CustomFunctionOutputProps<R, D> = {
   customMessageCallback?: CustomMessageCallback;
 };
 
+/**
+ * Type of ErrorCallbackResult
+ * 
+ * @param success - The flag to indicate if the function execution is successful.
+ * @param details - The details of the error.
+ */
 export type ErrorCallbackResult = {
   success: boolean;
   details: string;
 };
 
+/**
+ * Props of the callback function.
+ * 
+ * @param functionName - The name of the function.
+ * @param functionArgs - The arguments of the function.
+ * @param functionContext - The context of the function. See {@link CustomFunctionContext} for more details.
+ * @param previousOutput - The output of the previous function.
+ */
 export type CallbackFunctionProps = {
   functionName: string;
   functionArgs: Record<string, unknown>;
@@ -97,6 +124,12 @@ export type CallbackFunctionProps = {
   previousOutput?: CustomFunctionOutputProps<unknown, unknown>[];
 };
 
+/**
+ * Callback function for custom functions. You can define your own callback function to execute custom functions.
+ * 
+ * @param props - The props of the callback function. See {@link CallbackFunctionProps} for more details.
+ * @returns The output of the custom function. See {@link CustomFunctionOutputProps} for more details.
+ */
 export type CallbackFunction = (props: CallbackFunctionProps) =>
   | CustomFunctionOutputProps<unknown, unknown>
   | Promise<CustomFunctionOutputProps<unknown, unknown>>;
@@ -117,7 +150,10 @@ export type CustomFunctions = {
 
 /**
  * Type of CustomFunctionCall
- *
+ * 
+ * @param functionName - The name of the function.
+ * @param functionArgs - The arguments of the function.
+ * @param output - The output of the function execution.
  */
 export type CustomFunctionCall = {
   /** the name of the function */
@@ -150,6 +186,12 @@ export type StreamMessageCallback = (props: {
   isCompleted?: boolean;
 }) => void;
 
+/**
+ * Type of UserActionProps
+ * 
+ * @param role - The role of the user.
+ * @param text - The text of the user action.
+ */
 export type UserActionProps = {
   role: string;
   text: string;
@@ -157,6 +199,13 @@ export type UserActionProps = {
 
 /**
  * Type of ProcessMessageProps
+ * 
+ * @param textMessage - The text message to be processed.
+ * @param imageMessage - The image message to be processed.
+ * @param userActions - The user actions to be processed.
+ * @param streamMessageCallback - The stream message callback to stream the message back to the UI.
+ * @param useTool - The flag to indicate if the tool is used.
+ * @param message - The message to be processed.
  */
 export type ProcessMessageProps = {
   textMessage?: string;
@@ -183,8 +232,9 @@ export type ProcessImageMessageProps = {
 /**
  * Type of AudioToTextProps
  * 
- * @param audioMessage The audio message to be processed, the content should be base64 encoded string
- * @param streamMessageCallback The stream message callback to stream the message back to the UI
+ * @param audioBlob - The audio blob to be processed. Optional.
+ * @param audioBase64 - The audio base64 to be processed. Optional.
+ * @param streamMessageCallback - The stream message callback to stream the message back to the UI.
  */
 export type AudioToTextProps = {
   audioBlob?: Blob;
@@ -192,6 +242,17 @@ export type AudioToTextProps = {
   streamMessageCallback?: StreamMessageCallback;
 };
 
+/**
+ * Type of RegisterFunctionCallingProps
+ * 
+ * @param name - The name of the function.
+ * @param description - The description of the function.
+ * @param properties - The properties of the function.
+ * @param required - The required properties of the function.
+ * @param callbackFunction - The callback function of the function.
+ * @param callbackFunctionContext - The context of the callback function.
+ * @param callbackMessage - The message of the callback function.
+ */
 export type RegisterFunctionCallingProps = {
   name: string;
   description: string;
@@ -211,6 +272,18 @@ export type RegisterFunctionCallingProps = {
   callbackMessage?: CustomMessageCallback;
 };
 
+/**
+ * Type of OpenAIConfigProps
+ * 
+ * @param apiKey - The API key of the OpenAI.
+ * @param model - The model of the OpenAI.
+ * @param temperature - The temperature of the OpenAI.
+ * @param top_p - The top_p of the OpenAI.
+ * @param name - The name of the OpenAI.
+ * @param description - The description of the OpenAI.
+ * @param instructions - The instructions of the OpenAI.
+ * @param version - The version of the OpenAI.
+ */
 export type OpenAIConfigProps = {
   apiKey: string;
   model: string;

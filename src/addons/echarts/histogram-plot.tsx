@@ -4,7 +4,10 @@ import { Resizable } from 're-resizable';
 import { Card, CardBody, CardHeader } from '@nextui-org/react';
 import ReactEChartsCore from 'echarts-for-react';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { use as echartsUse, registerTheme as echartsRegisterTheme } from 'echarts/core';
+import {
+  use as echartsUse,
+  registerTheme as echartsRegisterTheme,
+} from 'echarts/core';
 import { BarChart } from 'echarts/charts';
 import {
   GridComponent,
@@ -15,7 +18,7 @@ import {
 import { CanvasRenderer } from 'echarts/renderers';
 import { TopLevelFormatterParams } from 'echarts/types/dist/shared';
 
-import { ECHARTS_DARK_THEME } from '../echarts/echarts-theme';
+import { ECHARTS_DARK_THEME } from './echarts-theme';
 import { useTheme } from 'next-themes';
 
 import { CustomFunctionCall } from '../../types';
@@ -85,20 +88,18 @@ export function HistogramComponent({
   output,
 }: CustomFunctionCall): ReactNode | null {
   const { theme: systemTheme } = useTheme();
-  const data = output.data as HistogramOuputData;
+  const data = output.data as HistogramOuputData | undefined;
 
   // get chart option by calling getChartOption only once
   const option = useMemo(() => {
     try {
-      return getHistogramChartOption(
-        null,
-        data.histogramData,
-        data.barDataIndexes
-      );
+      return data
+        ? getHistogramChartOption(null, data.histogramData, data.barDataIndexes)
+        : {};
     } catch {
       return {};
     }
-  }, [data.histogramData, data.barDataIndexes]);
+  }, [data?.histogramData, data?.barDataIndexes]);
 
   const eChartsRef = useRef<ReactEChartsCore>(null);
   // track if the chart has been rendered, so we can update the chart later
@@ -126,10 +127,8 @@ export function HistogramComponent({
 
         // get selected ids from brushed bars
         const filteredIndex =
-          brushed.length > 0
-            ? brushed
-                .map((idx: number) => data.barDataIndexes[idx])
-                .flat()
+          data && brushed.length > 0
+            ? brushed.map((idx: number) => data.barDataIndexes[idx]).flat()
             : [];
 
         // check if this plot is in state.plots
@@ -140,19 +139,19 @@ export function HistogramComponent({
             const chartInstance = chart.getEchartsInstance();
             const updatedOption = getHistogramChartOption(
               null,
-              data.histogramData,
-              data.barDataIndexes
+              data?.histogramData ?? [],
+              data?.barDataIndexes ?? []
             );
             chartInstance.setOption(updatedOption);
           }
         }
         // Dispatch action to highlight selected in other components
-        data.onSelected?.(data.datasetName, filteredIndex);
+        data?.onSelected?.(data?.datasetName ?? '', filteredIndex);
       },
     };
-  }, [data.barDataIndexes, data.onSelected, data.histogramData]);
+  }, [data?.barDataIndexes, data?.onSelected, data?.histogramData]);
 
-  if (!data.variableName || !data.histogramData || !data.barDataIndexes) {
+  if (!data?.variableName || !data?.histogramData || !data?.barDataIndexes) {
     return null;
   }
 
@@ -163,10 +162,10 @@ export function HistogramComponent({
           <Card className="h-full w-full" shadow="none">
             <CardHeader className="flex-col items-start px-4 pb-0 pt-2">
               <p className="text-tiny font-bold uppercase">
-                {data.variableName}
+                {data?.variableName}
               </p>
               <small className="truncate text-default-500">
-                {data.variableName}
+                {data?.variableName}
               </small>
             </CardHeader>
             <CardBody className="py-2">

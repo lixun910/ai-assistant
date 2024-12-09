@@ -152,7 +152,7 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
             )}
           </Badge>
         </div>
-        <div className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-4 overflow-x-auto">
           <div
             className={cn(
               'group relative w-full rounded-medium px-4 py-3 text-default-600 ',
@@ -160,7 +160,10 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
               messageClassName
             )}
           >
-            <div ref={messageRef} className={'min-h-8 whitespace-pre-line'}>
+            <div
+              ref={messageRef}
+              className={'min-h-8 whitespace-pre-line max-w-full'}
+            >
               {/* show screenshot image */}
               {customMessage &&
                 typeof customMessage === 'string' &&
@@ -175,7 +178,22 @@ const MessageCard = forwardRef<HTMLDivElement, MessageCardProps>(
               {hasFailed && failedMessage}
               {/* show message */}
               {message}
-              {/* <Markdown className="flex flex-col gap-4">{message as string}</Markdown> */}
+              {/* <Markdown
+                remarkPlugins={[remarkGfm]}
+                className="max-w-full overflow-hidden break-words"
+                components={{
+                  pre: ({ children }) => (
+                    <pre className="max-w-full overflow-x-auto">{children}</pre>
+                  ),
+                  code: ({ children }) => (
+                    <code className="max-w-full overflow-x-auto">
+                      {children}
+                    </code>
+                  ),
+                }}
+              >
+                {message as string}
+              </Markdown> */}
               {/* show custom message */}
               {customMessage && isValidElement(customMessage) && (
                 <>{customMessage}</>

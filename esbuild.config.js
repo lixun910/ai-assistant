@@ -26,7 +26,13 @@ esbuild
       }),
     ],
     // make react and react-dom external, so that the bundle is smaller
-    external: ['react', 'react-dom', 'echarts'],
+    external: [
+      'react',
+      'react-dom',
+      'echarts',
+      '@duckdb/duckdb-wasm',
+      'apache-arrow',
+    ],
   })
   .then((result) => {
     if (watch) {
