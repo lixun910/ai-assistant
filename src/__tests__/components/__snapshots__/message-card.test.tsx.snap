@@ -48,13 +48,13 @@ exports[`MessageCard Component renders the message correctly 1`] = `
       </div>
     </div>
     <div
-      class="flex w-full flex-col gap-4"
+      class="flex w-full flex-col gap-4 overflow-x-auto"
     >
       <div
         class="group relative w-full rounded-medium px-4 py-3 text-default-600"
       >
         <div
-          class="min-h-8 whitespace-pre-line"
+          class="min-h-8 whitespace-pre-line max-w-full"
         >
           Test message
         </div>
