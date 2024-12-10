@@ -29,5 +29,13 @@
     "src/**/wip/**",
     "src/**/jest/**",
     "dist"
-  ]
+  ],
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "out": "docs",
+    "plugin": ["typedoc-plugin-markdown"],
+    "excludePrivate": true,
+    "excludeProtected": true,
+    "excludeExternals": true
+  }
 }

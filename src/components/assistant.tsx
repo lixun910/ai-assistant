@@ -11,7 +11,7 @@ import {
 } from './assistant-utils';
 
 /**
- * Type of AiAssistantProps. It extends {@link UseAssistantProps}.
+ * Type of AiAssistantProps.
  * 
  * @param theme - The theme of the assistant.
  * @param welcomeMessage - The welcome message of the assistant.
@@ -68,9 +68,18 @@ const createWelcomeMessage = (welcomeMessage: string): MessageModel => ({
 });
 
 /**
- * The Assistant react component.
- * @param props - The props of the Assistant component. See {@link AiAssistantProps} for more details.
- * @returns The Assistant component.
+ * Main AI Assistant component for React applications
+ * @component
+ * @param {AiAssistantProps} props - The props of the Assistant component. See {@link AiAssistantProps} for more details.
+ * @returns {JSX.Element} The rendered AI Assistant component
+ * @example
+ * ```tsx
+ * <AiAssistant 
+ *   modelProvider="openai"
+ *   model="gpt-4"
+ *   apiKey="your-api-key"
+ * />
+ * ```
  */
 export function AiAssistant(props: AiAssistantProps) {
   const [messages, setMessages] = useState<MessageModel[]>(
