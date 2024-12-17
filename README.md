@@ -17,10 +17,10 @@ MIT License.
 - Support custom functions.
   - support calling existing actions
   - support custom message UI.
-- AddOns: add extra features to your ai assistant, so your users can prompt to: 
-  - query your dataset using duckdb
+- Addons: 
+  - query your dataset using duckdb https://www.npmjs.com/package/@react-ai-assist/duckdb
   - map your data
-  - analyze and visualize your data
+  - analyze and visualize your data  https://www.npmjs.com/package/@react-ai-assist/echarts
   - ...
 
 ## Usage
