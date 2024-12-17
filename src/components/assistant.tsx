@@ -12,7 +12,7 @@ import {
 
 /**
  * Type of AiAssistantProps.
- * 
+ *
  * @param theme - The theme of the assistant.
  * @param welcomeMessage - The welcome message of the assistant.
  * @param historyMessages - The history messages of the assistant.
@@ -74,7 +74,7 @@ const createWelcomeMessage = (welcomeMessage: string): MessageModel => ({
  * @returns {JSX.Element} The rendered AI Assistant component
  * @example
  * ```tsx
- * <AiAssistant 
+ * <AiAssistant
  *   modelProvider="openai"
  *   model="gpt-4"
  *   apiKey="your-api-key"
@@ -104,6 +104,7 @@ export function AiAssistant(props: AiAssistantProps) {
     name: props.name,
     description: props.description,
     version: props.version,
+    baseUrl: props.baseUrl,
   });
 
   const isScreenshotAvailable =

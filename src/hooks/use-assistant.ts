@@ -37,6 +37,7 @@ export type UseAssistantProps = {
   model: string;
   apiKey: string;
   version: string;
+  baseUrl?: string;
   description?: string;
   temperature?: number;
   topP?: number;
@@ -99,6 +100,7 @@ export function useAssistant({
   modelProvider,
   model,
   apiKey,
+  baseUrl,
   temperature,
   topP,
   instructions,
@@ -120,6 +122,7 @@ export function useAssistant({
       AssistantModel.configure({
         model,
         apiKey,
+        baseUrl,
         instructions,
         temperature,
         topP,

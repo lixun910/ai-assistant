@@ -32,6 +32,7 @@ esbuild
       'echarts',
       '@duckdb/duckdb-wasm',
       'apache-arrow',
+      'geoda-wasm',
     ],
   })
   .then((result) => {

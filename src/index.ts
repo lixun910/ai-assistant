@@ -17,7 +17,3 @@ export {
   testGeminiConnection,
   testOllamConnection,
 } from './utils/connection-test';
-
-export { histogramFunctionDefinition } from './addons/echarts/histogram';
-
-export { queryDuckDBFunctionDefinition } from './addons/duckdb/query';
