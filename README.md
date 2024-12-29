@@ -1,3 +1,7 @@
+# [DEPRECATED] 
+
+## Please use https://github.com/lixun910/openassistant
+
 # Introduction
 
 AI-Assistant helps adding AI capabilities to your React SPA  applications while keeping your data secure and private.
